@@ -1,0 +1,103 @@
+.admin-container {
+  padding: 2rem;
+  background: #f7f7f7;
+  min-height: calc(100vh - 120px);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #d1a000;
+  padding-bottom: 0.5rem;
+}
+
+.toolbar h2 {
+  color: #4a1f1f;
+  font-weight: bold;
+  margin: 0;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #777;
+  margin: 2rem 0;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card img {
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1rem;
+}
+
+.card-content h3 {
+  margin: 0 0 0.5rem;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.card-content .subtitle {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.card-content .precio {
+  font-weight: bold;
+  color: #d1a000;
+  margin-top: 0.5rem;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.card-actions button {
+  font-weight: bold;
+}
+
+.card-content h3 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.precio {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #d1a000; /* color corporativo */
+}
+

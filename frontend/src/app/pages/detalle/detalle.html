@@ -1,0 +1,97 @@
+<app-navbar></app-navbar>
+<div class="body">
+  <div *ngIf="inmueble" class="detalle-container">
+    <!-- Imagen destacada -->
+    <div class="detalle-img">
+      <img
+        [src]="
+          inmueble.fotoPrincipal
+            ? 'http://localhost:3000' + inmueble.fotoPrincipal
+            : 'https://picsum.photos/seed/fallback/1200/700'
+        "
+        alt="foto inmueble"
+      />
+    </div>
+
+    <!-- Información -->
+    <div class="detalle-info">
+      <!-- Botón volver y idealista -->
+      <div class="detalle-actions-top">
+        <button class="btn-volver" mat-stroked-button color="accent" routerLink="/">
+          ⬅ Volver
+        </button>
+        <a
+          mat-raised-button
+          class="btn-idealista"
+          color="primary"
+          [href]="inmueble.urlIdealista"
+          target="_blank"
+          rel="noopener"
+        >
+          🔗 Idealista
+        </a>
+      </div>
+
+      <h1 class="detalle-titulo">{{ inmueble.titulo }}</h1>
+      <h2 class="detalle-precio">{{ inmueble.precio | currency : 'EUR' }}</h2>
+      <p class="detalle-descripcion">{{ inmueble.descripcion }}</p>
+
+      <mat-divider></mat-divider>
+
+      <!-- Datos principales en dos columnas -->
+      <ul class="detalle-datos">
+        <li>
+          <mat-icon color="primary">store</mat-icon><b> Operación:</b>
+          {{ inmueble.operacion | titlecase }}
+        </li>
+        <li>
+          <mat-icon color="primary">home</mat-icon><b> Tipo:</b> {{ inmueble.tipo | titlecase }}
+        </li>
+        <li><mat-icon color="primary">location_on</mat-icon><b> Zona:</b> {{ inmueble.zona }}</li>
+        <li>
+          <mat-icon color="primary">king_bed</mat-icon><b> Dormitorios:</b>
+          {{ inmueble.dormitorios }}
+        </li>
+        <li><mat-icon color="primary">bathtub</mat-icon><b> Baños:</b> {{ inmueble.banos }}</li>
+        <li>
+          <mat-icon color="primary">straighten</mat-icon><b> Metros:</b> {{ inmueble.metros }} m²
+        </li>
+        <li>
+          <mat-icon color="primary">build</mat-icon><b> Estado:</b>
+          {{ inmueble.estado | titlecase }}
+        </li>
+        <li *ngIf="inmueble.orientacion">
+          <mat-icon color="primary">explore</mat-icon><b> Orientación:</b>
+          {{ inmueble.orientacion | titlecase }}
+        </li>
+        <li *ngIf="inmueble.anoConstruccion">
+          <mat-icon color="primary">event</mat-icon><b> Año construcción:</b>
+          {{ inmueble.anoConstruccion }}
+        </li>
+        <li>
+          <mat-icon color="primary">fireplace</mat-icon><b> Calefacción:</b>
+          {{ inmueble.calefaccion | titlecase }}
+        </li>
+        <li *ngIf="inmueble.gastosComunidad">
+          <mat-icon color="primary">euro</mat-icon><b> Gastos comunidad:</b>
+          {{ inmueble.gastosComunidad | currency : 'EUR' }}
+        </li>
+        <li>
+          <mat-icon color="primary">elevator</mat-icon><b> Ascensor:</b>
+          {{ inmueble.ascensor ? 'Sí' : 'No' }}
+        </li>
+      </ul>
+
+      <!-- Características extra -->
+      <div *ngIf="inmueble.caracteristicas?.length">
+        <mat-divider></mat-divider>
+        <h3>Características adicionales</h3>
+        <ul class="detalle-caracteristicas">
+          <li *ngFor="let c of inmueble.caracteristicas">✔ {{ c | titlecase }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
+<app-contact-bar></app-contact-bar>

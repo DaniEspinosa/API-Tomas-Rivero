@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+
+<div class="admin-container">
+  <div class="toolbar">
+    <h2>📋 Gestión de inmuebles</h2>
+    <button mat-raised-button color="primary" (click)="nuevo()">+ Nuevo</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando inmuebles...</div>
+
+  <div class="grid">
+    <mat-card class="card" *ngFor="let i of inmuebles">
+      <img
+        mat-card-image
+        [src]="
+          i.fotoPrincipal
+            ? 'http://localhost:3000' + i.fotoPrincipal
+            : 'https://picsum.photos/seed/fallback/800/450'
+        "
+        alt="foto"
+      />
+
+      <mat-card-content class="card-content">
+        <h3>{{ i.titulo }}</h3>
+        <p class="subtitle">{{ i.tipo | titlecase }} · {{ i.zona }}</p>
+        <p class="subtitle">
+          🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metros || 0 }} m²
+        </p>
+        <p class="precio">{{ i.precio | currency : 'EUR' }}</p>
+      </mat-card-content>
+
+      <mat-card-actions class="card-actions">
+        <button mat-stroked-button color="primary" (click)="editar(i)">✏ Editar</button>
+        <button mat-stroked-button color="warn" (click)="eliminar(i)">🗑 Eliminar</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<app-footer></app-footer>

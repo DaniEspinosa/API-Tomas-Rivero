@@ -1,0 +1,17 @@
+.contact-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4a1f1f;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.contact-bar a {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+}
