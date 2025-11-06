@@ -7,35 +7,75 @@ exports.getAll = async (req, res) => {
     const {
       tipo,
       zona,
+      operacion,
       dormitoriosMin,
       dormitoriosMax,
+      banosMin,
+      banosMax,
       precioMin,
       precioMax,
-      operacion,
+      metrosMin,
+      metrosMax,
+      estado,
     } = req.query;
 
     const where = {};
 
-    if (tipo) where.tipo = tipo;
-    if (zona) where.zona = zona;
+    // 🔹 Tipo y operación
+    if (tipo) {
+      try {
+        const tipos = JSON.parse(tipo);
+        if (Array.isArray(tipos) && tipos.length > 0) {
+          where.tipo = { [Op.in]: tipos }; // Filtra por múltiples tipos
+        } else {
+          where.tipo = tipo; // Filtro simple
+        }
+      } catch {
+        where.tipo = tipo;
+      }
+    }
     if (operacion) where.operacion = operacion;
+    if (estado) where.estado = estado;
 
+    // 🔹 Zona (busca coincidencia parcial, sin importar mayúsculas/minúsculas)
+    if (zona) {
+      where.zona = { [Op.like]: `%${zona}%` };
+    }
+
+    // 🔹 Dormitorios (rango)
     if (dormitoriosMin || dormitoriosMax) {
       where.dormitorios = {};
       if (dormitoriosMin) where.dormitorios[Op.gte] = Number(dormitoriosMin);
       if (dormitoriosMax) where.dormitorios[Op.lte] = Number(dormitoriosMax);
     }
 
+    // 🔹 Baños (rango)
+    if (banosMin || banosMax) {
+      where.banos = {};
+      if (banosMin) where.banos[Op.gte] = Number(banosMin);
+      if (banosMax) where.banos[Op.lte] = Number(banosMax);
+    }
+
+    // 🔹 Precio (rango)
     if (precioMin || precioMax) {
       where.precio = {};
       if (precioMin) where.precio[Op.gte] = Number(precioMin);
       if (precioMax) where.precio[Op.lte] = Number(precioMax);
     }
 
+    // 🔹 Metros Cuadrados (rango)
+    if (metrosMin || metrosMax) {
+      where.metrosUtiles = {};
+      if (metrosMin) where.metrosUtiles[Op.gte] = Number(metrosMin);
+      if (metrosMax) where.metrosUtiles[Op.lte] = Number(metrosMax);
+    }
+
+    // 🔹 Obtener resultados ordenados del más nuevo al más antiguo
     const inmuebles = await Inmueble.findAll({
       where,
       order: [["id", "DESC"]],
     });
+
     res.json(inmuebles);
   } catch (e) {
     console.error(e);

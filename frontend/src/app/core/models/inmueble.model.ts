@@ -21,7 +21,9 @@ export interface Inmueble {
   zona: string;
   dormitorios: number;
   banos: number;
-  metros: number;
+  metrosUtiles: number;
+  metrosConstruidos: number;
+  metrosParcela: number;
   precio: number;
 
   estado: 'a reformar' | 'en buen estado' | 'obra nueva';

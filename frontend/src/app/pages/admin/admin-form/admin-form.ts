@@ -26,10 +26,10 @@ import { Navbar } from '../../../shared/components/navbar/navbar';
     MatCheckboxModule,
     MatSnackBarModule,
     Navbar,
-    Footer
+    Footer,
   ],
   templateUrl: './admin-form.html',
-  styleUrls: ['./admin-form.css']
+  styleUrls: ['./admin-form.css'],
 })
 export class AdminForm implements OnInit {
   id?: number;
@@ -42,7 +42,9 @@ export class AdminForm implements OnInit {
     zona: '',
     dormitorios: 1,
     banos: 1,
-    metros: 0,
+    metrosUtiles: 0,
+    metrosConstruidos: 0,
+    metrosParcela: 0,
     precio: 0,
     estado: 'en buen estado',
     orientacion: undefined,
@@ -52,7 +54,7 @@ export class AdminForm implements OnInit {
     caracteristicas: [],
     ascensor: false,
     fotoPrincipal: '',
-    urlIdealista: ''
+    urlIdealista: '',
   };
 
   selectedFile: File | null = null;
@@ -102,7 +104,9 @@ export class AdminForm implements OnInit {
     formData.append('zona', this.model.zona || '');
     formData.append('dormitorios', this.model.dormitorios?.toString() ?? '0');
     formData.append('banos', this.model.banos?.toString() ?? '0');
-    formData.append('metros', this.model.metros?.toString() ?? '0');
+    formData.append('metrosUtiles', this.model.metrosUtiles?.toString() ?? '0');
+    formData.append('metrosConstruidos', this.model.metrosConstruidos?.toString() ?? '0');
+    formData.append('metrosParcela', this.model.metrosParcela?.toString() ?? '0');
     formData.append('precio', this.model.precio?.toString() ?? '0');
     formData.append('estado', this.model.estado || 'en buen estado');
 
@@ -150,12 +154,11 @@ export class AdminForm implements OnInit {
         this.loading = false;
         this.snack.open('❌ Error guardando inmueble', 'Cerrar', {
           duration: 3000,
-          panelClass: 'snackbar-error'
+          panelClass: 'snackbar-error',
         });
-      }
+      },
     });
   }
-
 
   cancelar() {
     this.router.navigate(['/admin']);

@@ -1,9 +1,8 @@
 .footer {
-  background: #4A1F1F; /* color secundario */
+  background: #4a1f1f; /* color secundario */
   color: #fff;
   text-align: center;
   padding: 2rem 1rem;
-  margin-top: 2rem;
   border-top: 4px solid #d1a000; /* borde con color principal */
 }
 

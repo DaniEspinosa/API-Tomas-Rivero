@@ -6,15 +6,27 @@ import { CurrencyPipe, NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Navbar } from "../../../shared/components/navbar/navbar";
-import { Footer } from "../../../shared/components/footer/footer";
+import { Navbar } from '../../../shared/components/navbar/navbar';
+import { Footer } from '../../../shared/components/footer/footer';
+import { ReplaceUnderscorePipe } from '../../../replace-underscore-pipe';
 
 @Component({
   selector: 'app-admin-list',
   standalone: true,
-  imports: [NgFor, NgIf, MatButtonModule, MatCardModule, CurrencyPipe, TitleCasePipe, MatSnackBarModule, Navbar, Footer],
+  imports: [
+    NgFor,
+    NgIf,
+    MatButtonModule,
+    ReplaceUnderscorePipe,
+    MatCardModule,
+    CurrencyPipe,
+    TitleCasePipe,
+    MatSnackBarModule,
+    Navbar,
+    Footer,
+  ],
   templateUrl: './admin-list.html',
-  styleUrls: ['./admin-list.css']
+  styleUrls: ['./admin-list.css'],
 })
 export class AdminList implements OnInit {
   inmuebles: Inmueble[] = [];
@@ -29,11 +41,11 @@ export class AdminList implements OnInit {
   cargar() {
     this.loading = true;
     this.api.getInmuebles().subscribe({
-      next: data => { 
-        this.inmuebles = data; 
-        this.loading = false; 
+      next: (data) => {
+        this.inmuebles = data;
+        this.loading = false;
       },
-      error: () => this.loading = false
+      error: () => (this.loading = false),
     });
   }
 
@@ -53,16 +65,16 @@ export class AdminList implements OnInit {
       next: () => {
         this.snack.open('✅ Inmueble eliminado con éxito', 'Cerrar', {
           duration: 3000,
-          panelClass: 'snackbar-success'
+          panelClass: 'snackbar-success',
         });
         this.cargar();
       },
       error: () => {
         this.snack.open('❌ Error eliminando inmueble', 'Cerrar', {
           duration: 3000,
-          panelClass: 'snackbar-error'
+          panelClass: 'snackbar-error',
         });
-      }
+      },
     });
   }
 }

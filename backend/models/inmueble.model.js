@@ -33,7 +33,17 @@ const Inmueble = sequelize.define("Inmueble", {
   zona: { type: DataTypes.STRING, allowNull: false },
   dormitorios: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
   banos: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
-  metros: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+  metrosUtiles: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+  metrosConstruidos: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  metrosParcela: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
 
   precio: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0 },
 

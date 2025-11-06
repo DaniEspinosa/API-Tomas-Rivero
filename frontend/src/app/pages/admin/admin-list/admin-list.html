@@ -22,9 +22,9 @@
 
       <mat-card-content class="card-content">
         <h3>{{ i.titulo }}</h3>
-        <p class="subtitle">{{ i.tipo | titlecase }} · {{ i.zona }}</p>
+        <p class="subtitle">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
         <p class="subtitle">
-          🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metros || 0 }} m²
+          🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosConstruidos || 0 }} m²
         </p>
         <p class="precio">{{ i.precio | currency : 'EUR' }}</p>
       </mat-card-content>

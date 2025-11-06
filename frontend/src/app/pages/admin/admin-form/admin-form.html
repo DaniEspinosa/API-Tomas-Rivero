@@ -63,10 +63,27 @@
         <input matInput type="number" [(ngModel)]="model.banos" name="banos" />
       </mat-form-field>
 
-      <!-- Metros -->
+      <!-- Metros Utiles-->
       <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Metros cuadrados</mat-label>
-        <input matInput type="number" [(ngModel)]="model.metros" name="metros" />
+        <mat-label>Metros Utiles</mat-label>
+        <input matInput type="number" [(ngModel)]="model.metrosUtiles" name="metrosUtiles" />
+      </mat-form-field>
+
+      <!-- Metros Construidos-->
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Metros Construidos</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="model.metrosConstruidos"
+          name="metrosConstruidos"
+        />
+      </mat-form-field>
+
+      <!-- Metros Construidos-->
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Metros Parcela</mat-label>
+        <input matInput type="number" [(ngModel)]="model.metrosParcela" name="metrosParcela" />
       </mat-form-field>
 
       <!-- Precio -->

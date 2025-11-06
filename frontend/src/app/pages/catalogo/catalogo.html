@@ -3,15 +3,26 @@
 <section class="hero">
   <h1>Encuentra la propiedad de tus sueños</h1>
   <form class="search-bar" (ngSubmit)="buscar()">
+    <div class="operacion-toggle">
+      <mat-button-toggle-group
+        [(ngModel)]="f.operacion"
+        name="operacion"
+        aria-label="Tipo de operación"
+        appearance="legacy"
+        (change)="buscar()"
+      >
+        <mat-button-toggle value="">Todos</mat-button-toggle>
+        <mat-button-toggle value="venta">Venta</mat-button-toggle>
+        <mat-button-toggle value="alquiler">Alquiler</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
     <mat-form-field>
       <mat-label>Tipo</mat-label>
       <mat-select [(ngModel)]="f.tipo" name="tipo">
-        <mat-option value="">Todos</mat-option>
-        <mat-option value="piso">Piso</mat-option>
-        <mat-option value="atico">Ático</mat-option>
-        <mat-option value="duplex">Dúplex</mat-option>
-        <mat-option value="chalet_adosado">Chalet adosado</mat-option>
-        <mat-option value="casa_independiente">Casa independiente</mat-option>
+        <mat-option value="">Cualquiera</mat-option>
+        <mat-option value="pisos">Pisos, Áticos y Dúplex</mat-option>
+        <mat-option value="chalets">Chalets y Casas</mat-option>
         <mat-option value="oficina">Oficina</mat-option>
         <mat-option value="local">Local</mat-option>
         <mat-option value="plaza_garaje">Plaza de garaje</mat-option>
@@ -25,31 +36,112 @@
       <input matInput [(ngModel)]="f.zona" name="zona" placeholder="Centro, Norte..." />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Dorm. mín</mat-label>
-      <input matInput type="number" [(ngModel)]="f.dormitoriosMin" name="dormitoriosMin" />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Dorm. max</mat-label>
-      <input matInput type="number" [(ngModel)]="f.dormitoriosMax" name="dormitoriosMax" />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Precio min</mat-label>
-      <input matInput type="number" [(ngModel)]="f.precioMin" name="precioMin" />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Precio máx</mat-label>
-      <input matInput type="number" [(ngModel)]="f.precioMax" name="precioMax" />
-    </mat-form-field>
-
     <div class="actions">
       <button class="botonOtroColor" mat-stroked-button>Buscar</button>
+      <button class="botonOtroColor" mat-stroked-button (click)="toggleMoreFilters()">
+        {{ moreFiltersLabel }}
+      </button>
       <button class="botonOtroColor" mat-stroked-button type="button" (click)="limpiarFiltros()">
         Quitar filtros
       </button>
+    </div>
+
+    <div *ngIf="showMoreFilters" class="more-filters">
+      <!-- 🔹 Precio -->
+      <div>
+        <h3>Precio</h3>
+        <mat-form-field class="field">
+          <mat-label>Mín</mat-label>
+          <mat-select [(ngModel)]="f.precioMin" name="precioMin">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option *ngFor="let p of precios" [value]="p">{{ p | number }} €</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="field">
+          <mat-label>Máx</mat-label>
+          <mat-select [(ngModel)]="f.precioMax" name="precioMax">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option *ngFor="let p of precios" [value]="p">{{ p | number }} €</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- 🔹 Habitaciones -->
+      <div>
+        <h3>Habitaciones</h3>
+        <mat-form-field class="field">
+          <mat-label>Mín</mat-label>
+          <mat-select [(ngModel)]="f.dormitoriosMin" name="dormitoriosMin">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option *ngFor="let d of dormitorios" [value]="d">{{ d }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="field">
+          <mat-label>Máx</mat-label>
+          <mat-select [(ngModel)]="f.dormitoriosMax" name="dormitoriosMax">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option *ngFor="let d of dormitorios" [value]="d">{{ d }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- 🔹 Baños -->
+      <div>
+        <h3>Baños</h3>
+        <mat-form-field class="field">
+          <mat-label>Mín</mat-label>
+          <mat-select [(ngModel)]="f.banosMin" name="banosMin">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option *ngFor="let b of banos" [value]="b">{{ b }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="field">
+          <mat-label>Máx</mat-label>
+          <mat-select [(ngModel)]="f.banosMax" name="banosMax">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option *ngFor="let b of banos" [value]="b">{{ b }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- 🔹 Metros Cuadrados -->
+      <div>
+        <h3>Metros</h3>
+        <mat-form-field class="field">
+          <mat-label>Mín</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="f.metrosMin"
+            name="metrosMin"
+            placeholder="Mínimo"
+          />
+        </mat-form-field>
+        <mat-form-field class="field">
+          <mat-label>Máx</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="f.metrosMax"
+            name="metrosMax"
+            placeholder="Máximo"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- 🔹 Estado -->
+    <div *ngIf="showMoreFilters" class="estado-filter">
+      <h3>Estado</h3>
+      <mat-form-field>
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="f.estado" name="estado">
+          <mat-option value="">Cualquiera</mat-option>
+          <mat-option value="obra nueva">Obra nueva</mat-option>
+          <mat-option value="en buen estado">En buen estado</mat-option>
+          <mat-option value="a reformar">A reformar</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </form>
 </section>
@@ -67,17 +159,17 @@
     />
     <mat-card-content>
       <h3>{{ i.titulo }}</h3>
-      <p class="subtitle">{{ i.tipo | titlecase }} · {{ i.zona }}</p>
+      <p class="subtitle">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
       <p class="subtitle">
-        🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metros || 0 }} m²
+        🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosUtiles || 0 }} m²
       </p>
       <p class="precio">{{ i.precio | currency : 'EUR' }}</p>
     </mat-card-content>
     <mat-card-actions class="card-footer">
       <a mat-button color="primary" [routerLink]="['/inmueble', i.id]">Ver detalles</a>
-      <a mat-stroked-button color="primary" [href]="i.urlIdealista" target="_blank" rel="noopener">
-        Idealista
-      </a>
+      <a mat-stroked-button color="primary" [href]="i.urlIdealista" target="_blank" rel="noopener"
+        >Idealista</a
+      >
     </mat-card-actions>
   </mat-card>
 </div>
