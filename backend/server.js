@@ -17,16 +17,17 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (_req, res) => res.send("API Inmobiliaria OK"));
 
-// 🔑 Rutas
+// 🔑 Rutas de API
 app.use("/auth", authRoutes);
 app.use("/inmuebles", inmuebleRoutes);
 
 const PORT = process.env.PORT || 3000;
 
+// 🚀 Conexión a la base de datos y arranque
 (async () => {
   try {
     await db.sequelize.authenticate();
-    await db.sequelize.sync(); // crea tablas si no existen
+    await db.sequelize.sync();
     app.listen(PORT, () =>
       console.log(`✅ API escuchando en http://localhost:${PORT}`)
     );
@@ -35,3 +36,11 @@ const PORT = process.env.PORT || 3000;
     process.exit(1);
   }
 })();
+
+// 🌍 Servir el frontend Angular
+app.use(express.static(path.join(__dirname, "../frontend/dist/frontend")));
+
+// ✅ Captura cualquier otra ruta (Angular maneja el routing)
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/frontend/index.html"));
+});
