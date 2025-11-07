@@ -10,6 +10,7 @@ import { ContactBarTs } from '../../shared/components/contact-bar.ts/contact-bar
 import { Navbar } from '../../shared/components/navbar/navbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-detalle',
@@ -25,20 +26,22 @@ import { MatDividerModule } from '@angular/material/divider';
     CurrencyPipe,
     RouterModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   templateUrl: './detalle.html',
-  styleUrls: ['./detalle.css']
+  styleUrls: ['./detalle.css'],
 })
 export class Detalle implements OnInit {
   inmueble?: Inmueble;
 
   constructor(
     private service: InmueblesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit() {
+    this.viewportScroller.scrollToPosition([0, 0]);
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.service.getInmueble(id).subscribe((i) => {
       this.inmueble = i;

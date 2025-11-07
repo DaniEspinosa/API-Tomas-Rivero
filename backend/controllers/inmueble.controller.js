@@ -83,6 +83,22 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getZonas = async (req, res) => {
+  try {
+    const zonas = await Inmueble.findAll({
+      attributes: ["zona"],
+      where: { zona: { [Op.ne]: null } },
+      group: ["zona"],
+      order: [["zona", "ASC"]],
+      raw: true,
+    });
+    res.json(zonas.map((z) => z.zona).filter(Boolean));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Error obteniendo zonas" });
+  }
+};
+
 // 📌 GET uno
 exports.getOne = async (req, res) => {
   try {

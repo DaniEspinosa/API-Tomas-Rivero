@@ -8,8 +8,17 @@
 .hero h1 {
   margin-bottom: 2rem;
   font-size: 2.2rem;
+  line-height: 1.2;
   font-weight: bold;
   color: #333;
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 1.6rem; /* 🔹 más pequeño en móvil */
+    padding: 0 1rem; /* 🔹 margen interno para que no toque bordes */
+    line-height: 1.3; /* 🔹 espacio cómodo entre líneas */
+  }
 }
 
 h3 {
@@ -37,10 +46,41 @@ h3 {
 /* Filtros y más filtros */
 .more-filters {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   width: 100%;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0.9);
+  transform-origin: top;
+  transition: all 0.4s ease-in-out;
+  padding: 0; /* evita huecos cuando está oculto */
+}
+
+.more-filters.active {
+  max-height: 1000px;
+  opacity: 1;
+  transform: scaleY(1);
+  padding-top: 0.5rem; /* aparece suave con el contenido */
+}
+
+/* ANIMACIÓN PARA EL BLOQUE DE ESTADO */
+.estado-filter {
+  opacity: 0;
+  transform: scaleY(0.9);
+  transform-origin: top;
+  transition: all 0.4s ease-in-out;
+  max-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.estado-filter.active {
+  opacity: 1;
+  transform: scaleY(1);
+  max-height: 200px;
+  pointer-events: auto;
 }
 
 mat-form-field {
@@ -55,6 +95,28 @@ mat-form-field {
 mat-form-field input,
 mat-form-field select {
   width: 100%; /* Asegura que el contenido ocupe todo el campo */
+}
+
+/* Botón dentro del input */
+.clear-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-right: 4px;
+}
+
+.clear-btn mat-icon {
+  font-size: 18px;
+  color: #aaa; /* gris suave */
+  transition: color 0.2s ease;
+}
+
+.clear-btn:hover mat-icon {
+  color: #4a1f1f; /* cambia a color vino o dorado si prefieres */
 }
 
 /* Botones y filtros */
@@ -72,11 +134,84 @@ mat-form-field select {
   background-color: #d1a000;
 }
 
+/* 🔹 En móvil las tarjetas ocupan todo el ancho */
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 100%;
+    height: auto; /* Deja que el alto se adapte, pero sigue consistente */
+    margin: 0 auto;
+  }
+
+  .card img {
+    height: 200px; /* Reduce ligeramente para mejor equilibrio */
+  }
+}
+
+.no-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25vh; /* altura suficiente para centrarlo verticalmente */
+  background: #d1a000; /* mismo color que el fondo de la página */
+  color: #4a1f1f; /* color secundario para el texto */
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .card {
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .card:hover {
@@ -225,9 +360,76 @@ mat-button-toggle.mat-button-toggle-checked {
 .more-filters .estado-filter mat-form-field {
   width: auto;
   max-width: 250px; /* Asegura que el filtro no se expanda demasiado */
+  background-color: #d1a000;
 }
 
 .more-filters .field {
   width: 125px; /* Este tamaño lo puedes ajustar para que sea más pequeño si es necesario */
   margin-right: 10px;
+}
+
+/* Mantener fondo homogéneo durante transiciones */
+:host {
+  display: block;
+  background-color: #d1a000; /* tu color principal */
+  min-height: 100vh;
+}
+
+/* Evitar que Angular muestre fondo blanco al actualizar ngIf */
+.grid,
+.no-results {
+  background-color: #d1a000; /* mismo color que el fondo */
+  transition: opacity 0.5s ease;
+}
+
+/* Animación más fluida */
+.grid.ng-enter,
+.no-results.ng-enter {
+  opacity: 0;
+}
+
+.grid.ng-enter-active,
+.no-results.ng-enter-active {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  app-contact-bar {
+    display: none !important;
+  }
+}
+
+/* 💬 Botón flotante de WhatsApp */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366; /* verde oficial WhatsApp */
+  color: white;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: none; /* Oculto por defecto (solo en móvil se muestra) */
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* 📱 Mostrar solo en móviles */
+@media (max-width: 768px) {
+  .whatsapp-float {
+    display: flex;
+  }
+
+  app-contact-bar {
+    display: none !important;
+  }
 }

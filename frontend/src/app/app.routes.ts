@@ -6,7 +6,6 @@ import { AdminForm } from './pages/admin/admin-form/admin-form';
 import { adminGuard } from './core/guards/admin.guard';
 import { AdminLogin } from './pages/admin/admin-login/admin-login';
 
-
 export const routes: Routes = [
   { path: '', component: Catalogo },
   { path: 'inmueble/:id', component: Detalle },
@@ -16,5 +15,5 @@ export const routes: Routes = [
   { path: 'admin/nuevo', component: AdminForm },
   { path: 'admin/editar/:id', component: AdminForm },
 
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];

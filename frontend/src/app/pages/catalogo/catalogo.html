@@ -17,6 +17,7 @@
       </mat-button-toggle-group>
     </div>
 
+    <!-- 🔹 Tipo -->
     <mat-form-field>
       <mat-label>Tipo</mat-label>
       <mat-select [(ngModel)]="f.tipo" name="tipo">
@@ -31,9 +32,40 @@
       </mat-select>
     </mat-form-field>
 
+    <!-- 🔹 Zona -->
     <mat-form-field>
       <mat-label>Zona</mat-label>
-      <input matInput [(ngModel)]="f.zona" name="zona" placeholder="Centro, Norte..." />
+      <input
+        matInput
+        [(ngModel)]="f.zona"
+        name="zona"
+        placeholder="Centro, Norte..."
+        [matAutocomplete]="autoZona"
+        (ngModelChange)="filterZonas($event)"
+        (focus)="onZonaFocus()"
+      />
+
+      <!-- ❌ Botón dentro del input -->
+      <!-- ❌ Cruz dentro del input -->
+      <button
+        *ngIf="f.zona"
+        matSuffix
+        type="button"
+        class="clear-btn"
+        (click)="clearZona()"
+        aria-label="Borrar zona"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <mat-autocomplete
+        #autoZona="matAutocomplete"
+        (optionSelected)="onZonaSelected($event.option.value)"
+      >
+        <mat-option *ngFor="let z of filteredZonas" [value]="z">
+          {{ z }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
     <div class="actions">
@@ -46,7 +78,7 @@
       </button>
     </div>
 
-    <div *ngIf="showMoreFilters" class="more-filters">
+    <div class="more-filters" [class.active]="showMoreFilters">
       <!-- 🔹 Precio -->
       <div>
         <h3>Precio</h3>
@@ -131,7 +163,7 @@
     </div>
 
     <!-- 🔹 Estado -->
-    <div *ngIf="showMoreFilters" class="estado-filter">
+    <div class="estado-filter" [class.active]="showMoreFilters">
       <h3>Estado</h3>
       <mat-form-field>
         <mat-label>Estado</mat-label>
@@ -174,5 +206,18 @@
   </mat-card>
 </div>
 
+<div *ngIf="inmuebles.length === 0" class="no-results">
+  <p>No hay propiedades que coincidan con tu búsqueda 🏠</p>
+</div>
+
 <app-contact-bar></app-contact-bar>
+<a
+  href="https://wa.me/34670950002"
+  target="_blank"
+  rel="noopener"
+  class="whatsapp-float"
+  aria-label="Contactar por WhatsApp"
+>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+</a>
 <app-footer></app-footer>

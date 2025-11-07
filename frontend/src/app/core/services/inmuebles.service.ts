@@ -13,7 +13,7 @@ export class InmueblesService {
   getInmuebles(filtros?: any): Observable<Inmueble[]> {
     let params = new HttpParams();
     if (filtros) {
-      Object.keys(filtros).forEach(k => {
+      Object.keys(filtros).forEach((k) => {
         if (filtros[k] !== null && filtros[k] !== undefined && filtros[k] !== '') {
           params = params.set(k, filtros[k]);
         }
@@ -25,6 +25,10 @@ export class InmueblesService {
   // Obtener uno
   getInmueble(id: number): Observable<Inmueble> {
     return this.http.get<Inmueble>(`${this.api}/${id}`);
+  }
+
+  getZonas() {
+    return this.http.get<string[]>('http://localhost:3000/inmuebles/zonas');
   }
 
   // Crear con FormData

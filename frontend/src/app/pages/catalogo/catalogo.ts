@@ -18,6 +18,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ReplaceUnderscorePipe } from '../../replace-underscore-pipe';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-catalogo',
@@ -28,6 +30,8 @@ import { ReplaceUnderscorePipe } from '../../replace-underscore-pipe';
     ContactBarTs,
     MatRadioModule,
     MatCheckboxModule,
+    MatIconModule,
+    MatAutocompleteModule,
     MatExpansionModule,
     MatButtonToggleModule,
     ReplaceUnderscorePipe,
@@ -66,11 +70,14 @@ export class Catalogo implements OnInit {
   };
   showMoreFilters: boolean = false;
   moreFiltersLabel: string = 'Más filtros';
+  zonas: string[] = [];
+  filteredZonas: string[] = [];
 
   constructor(private readonly service: InmueblesService) {}
 
   ngOnInit() {
     this.buscar();
+    this.cargarZonas();
   }
 
   toggleMoreFilters() {
@@ -120,11 +127,53 @@ export class Catalogo implements OnInit {
     };
 
     console.log('🔍 Enviando filtros:', filtros);
+    console.log('📍 Valor actual de zona:', this.f.zona);
 
     this.service.getInmuebles(filtros).subscribe({
       next: (data) => (this.inmuebles = data),
       error: (err) => console.error('❌ Error cargando inmuebles:', err),
     });
+  }
+
+  clearZona() {
+    this.f.zona = '';
+    this.filteredZonas = this.zonas;
+    this.buscar(); // opcional: actualiza resultados al limpiar
+  }
+
+  cargarZonas() {
+    this.service.getZonas().subscribe({
+      next: (zs) => {
+        this.zonas = zs ?? [];
+        this.filteredZonas = [...this.zonas];
+      },
+      error: (e) => console.error('Error cargando zonas', e),
+    });
+  }
+
+  normalize(t: string) {
+    return (t || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '');
+  }
+
+  filterZonas(value: string) {
+    const v = this.normalize(value);
+    this.filteredZonas = v
+      ? this.zonas.filter((z) => this.normalize(z).includes(v))
+      : [...this.zonas];
+  }
+
+  onZonaFocus() {
+    // al enfocar, muestra todas si no hay nada escrito
+    this.filterZonas(this.f.zona || '');
+  }
+
+  onZonaSelected(zona: string) {
+    this.f.zona = zona; // ya autocompleta el input
+    // Si quieres disparar la búsqueda al seleccionar:
+    // this.buscar();
   }
 
   limpiarFiltros() {

@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // 📌 Rutas públicas
+router.get("/zonas", controller.getZonas);
 router.get("/", controller.getAll);
 router.get("/:id", controller.getOne);
 
