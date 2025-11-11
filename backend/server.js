@@ -40,6 +40,6 @@ const PORT = process.env.PORT || 3000;
 const frontendPath = path.join(__dirname, "../frontend/dist/frontend/browser");
 app.use(express.static(frontendPath));
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
