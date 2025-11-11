@@ -38,7 +38,14 @@ const PORT = process.env.PORT || 3000;
 const frontendPath = path.join(__dirname, "../frontend/dist/frontend");
 app.use(express.static(frontendPath));
 
-// ⚠️ Ruta catch-all (Angular router)
-app.get("*", (req, res) => {
+// ✅ Servir Angular en todas las rutas no API
+app.use((req, res, next) => {
+  if (
+    req.originalUrl.startsWith("/auth") ||
+    req.originalUrl.startsWith("/inmuebles") ||
+    req.originalUrl.startsWith("/uploads")
+  ) {
+    return next(); // deja pasar las rutas de API o estáticos
+  }
   res.sendFile(path.join(frontendPath, "index.html"));
 });
