@@ -37,10 +37,9 @@ const PORT = process.env.PORT || 3000;
   }
 })();
 
-// 🌍 Servir el frontend Angular
-app.use(express.static(path.join(__dirname, "../frontend/dist/frontend")));
+const frontendPath = path.join(__dirname, "../frontend/dist/frontend/browser");
+app.use(express.static(frontendPath));
 
-// ✅ Captura cualquier otra ruta (Angular maneja el routing)
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/frontend/index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
