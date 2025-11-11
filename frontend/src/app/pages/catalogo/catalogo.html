@@ -180,15 +180,17 @@
 
 <div class="grid">
   <mat-card *ngFor="let i of inmuebles" class="card">
-    <img
-      mat-card-image
-      [src]="
-        i.fotoPrincipal
-          ? 'https://api-tomas-rivero.onrender.com' + i.fotoPrincipal
-          : 'https://picsum.photos/seed/fallback/800/450'
-      "
-      alt="foto"
-    />
+    <a [routerLink]="['/inmueble', i.id]">
+      <img
+        mat-card-image
+        [src]="
+          i.fotoPrincipal
+            ? 'https://api-tomas-rivero.onrender.com' + i.fotoPrincipal
+            : 'https://picsum.photos/seed/fallback/800/450'
+        "
+        alt="foto"
+      />
+    </a>
     <mat-card-content>
       <h3>{{ i.titulo }}</h3>
       <p class="subtitle">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
