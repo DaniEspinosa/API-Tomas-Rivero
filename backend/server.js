@@ -9,21 +9,18 @@ const authRoutes = require("./routes/auth.routes");
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: ["http://localhost:4200"], credentials: true }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
-// 📂 Servir imágenes estáticas desde /uploads
+// 📂 Servir imágenes estáticas
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.get("/", (_req, res) => res.send("API Inmobiliaria OK"));
-
-// 🔑 Rutas de API
+// 🧠 Rutas de API
 app.use("/auth", authRoutes);
 app.use("/inmuebles", inmuebleRoutes);
 
+// 🧩 Conexión base de datos
 const PORT = process.env.PORT || 3000;
-
-// 🚀 Conexión a la base de datos y arranque
 (async () => {
   try {
     await db.sequelize.authenticate();
@@ -37,9 +34,11 @@ const PORT = process.env.PORT || 3000;
   }
 })();
 
-const frontendPath = path.join(__dirname, "../frontend/dist/frontend/browser");
+// 🌍 Servir Angular (Render)
+const frontendPath = path.join(__dirname, "../frontend/dist/frontend");
 app.use(express.static(frontendPath));
 
-app.use((req, res) => {
+// ⚠️ Ruta catch-all (Angular router)
+app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
