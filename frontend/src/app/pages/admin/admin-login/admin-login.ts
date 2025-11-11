@@ -12,11 +12,11 @@ import { NgIf } from '@angular/common';
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, NgIf],
   templateUrl: './admin-login.html',
-  styleUrls: ['./admin-login.scss']
+  styleUrls: ['./admin-login.scss'],
 })
 export class AdminLogin {
-  email = 'admin@tuinmobiliaria.com';
-  password = 'admin123';
+  email = 'tomas.rivero.matarredona@tomasapi.es';
+  password = 'tomasriveroapi1971';
   error = '';
 
   constructor(private auth: AuthService, private router: Router, private route: ActivatedRoute) {}
@@ -28,7 +28,7 @@ export class AdminLogin {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/admin';
         this.router.navigateByUrl(returnUrl);
       },
-      error: () => this.error = 'Credenciales incorrectas'
+      error: () => (this.error = 'Credenciales incorrectas'),
     });
   }
 }
