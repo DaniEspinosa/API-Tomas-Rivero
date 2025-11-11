@@ -15,8 +15,8 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./admin-login.scss'],
 })
 export class AdminLogin {
-  email = 'tomas.rivero.matarredona@tomasapi.es';
-  password = 'tomasriveroapi1971';
+  email = '';
+  password = '';
   error = '';
 
   constructor(private auth: AuthService, private router: Router, private route: ActivatedRoute) {}
