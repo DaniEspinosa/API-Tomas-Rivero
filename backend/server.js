@@ -35,7 +35,7 @@ const PORT = process.env.PORT || 3000;
 })();
 
 // 🌍 Servir Angular (Render)
-const frontendPath = path.join(__dirname, "../frontend/dist/frontend");
+const frontendPath = path.join(__dirname, "../frontend/dist/frontend/browser");
 app.use(express.static(frontendPath));
 
 // ✅ Servir Angular en todas las rutas no API
