@@ -5,7 +5,7 @@ import { Inmueble } from '../models/inmueble.model';
 
 @Injectable({ providedIn: 'root' })
 export class InmueblesService {
-  private api = 'http://localhost:3000/inmuebles';
+  private api = 'http://api-tomas-rivero.onrender.com/inmuebles';
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +28,7 @@ export class InmueblesService {
   }
 
   getZonas() {
-    return this.http.get<string[]>('http://localhost:3000/inmuebles/zonas');
+    return this.http.get<string[]>('http://api-tomas-rivero.onrender.com/inmuebles/zonas');
   }
 
   // Crear con FormData

@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private api = 'http://localhost:3000';
+  private api = 'https://api-tomas-rivero.onrender.com'; // URL correcta de tu backend desplegado
+
   private key = 'token';
 
   constructor(private http: HttpClient) {}
@@ -16,7 +17,8 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.api}/auth/login`, { email, password })
+    return this.http
+      .post<{ token: string }>(`${this.api}/auth/login`, { email, password })
       .pipe(tap(({ token }) => this.setToken(token)));
   }
 
