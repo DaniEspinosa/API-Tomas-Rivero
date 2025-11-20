@@ -32,11 +32,7 @@
 
       <h1 class="detalle-titulo">{{ inmueble.titulo }}</h1>
       <h2 class="detalle-precio">{{ inmueble.precio | currency : 'EUR' }}</h2>
-      <p class="detalle-descripcion">{{ inmueble.descripcion }}</p>
 
-      <mat-divider></mat-divider>
-
-      <!-- Datos principales en dos columnas -->
       <ul class="detalle-datos">
         <li>
           <mat-icon color="primary">store</mat-icon><b> Operación:</b>
@@ -88,6 +84,10 @@
           {{ inmueble.ascensor ? 'Sí' : 'No' }}
         </li>
       </ul>
+
+      <mat-divider></mat-divider>
+
+      <p class="detalle-descripcion">{{ inmueble.descripcion }}</p>
 
       <!-- Características extra -->
       <div *ngIf="inmueble.caracteristicas?.length">

@@ -14,6 +14,7 @@ export interface Inmueble {
     | 'casa_independiente'
     | 'oficina'
     | 'local'
+    | 'nave'
     | 'plaza_garaje'
     | 'terreno'
     | 'trastero';

@@ -26,6 +26,7 @@
         <mat-option value="chalets">Chalets y Casas</mat-option>
         <mat-option value="oficina">Oficina</mat-option>
         <mat-option value="local">Local</mat-option>
+        <mat-option value="nave">Nave</mat-option>
         <mat-option value="plaza_garaje">Plaza de garaje</mat-option>
         <mat-option value="terreno">Terreno</mat-option>
         <mat-option value="trastero">Trastero</mat-option>
@@ -197,7 +198,7 @@
       <p class="subtitle">
         🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosUtiles || 0 }} m²
       </p>
-      <p class="precio">{{ i.precio | currency : 'EUR' }}</p>
+      <p class="precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
     </mat-card-content>
     <mat-card-actions class="card-footer">
       <a mat-button color="primary" [routerLink]="['/inmueble', i.id]">Ver detalles</a>
