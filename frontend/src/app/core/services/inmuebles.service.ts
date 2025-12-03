@@ -2,12 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Inmueble } from '../models/inmueble.model';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class InmueblesService {
   private api = 'https://tomasapi.es/inmuebles';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
+
+  // 🔒 Helper: headers con token
+  private getAuthHeaders() {
+    const token = this.auth.getToken();
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  }
 
   // Listado con filtros opcionales
   getInmuebles(filtros?: any): Observable<Inmueble[]> {
@@ -31,18 +42,18 @@ export class InmueblesService {
     return this.http.get<string[]>('https://tomasapi.es/inmuebles/zonas');
   }
 
-  // Crear con FormData
+  // Crear con FormData (🔒 requiere token)
   createInmueble(data: FormData): Observable<Inmueble> {
-    return this.http.post<Inmueble>(this.api, data);
+    return this.http.post<Inmueble>(this.api, data, this.getAuthHeaders());
   }
 
-  // Actualizar con FormData
+  // Actualizar con FormData (🔒 requiere token)
   updateInmueble(id: number, data: FormData): Observable<Inmueble> {
-    return this.http.put<Inmueble>(`${this.api}/${id}`, data);
+    return this.http.put<Inmueble>(`${this.api}/${id}`, data, this.getAuthHeaders());
   }
 
-  // Eliminar
+  // Eliminar (🔒 requiere token)
   deleteInmueble(id: number): Observable<any> {
-    return this.http.delete(`${this.api}/${id}`);
+    return this.http.delete(`${this.api}/${id}`, this.getAuthHeaders());
   }
 }
