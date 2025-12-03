@@ -19,27 +19,33 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/auth", authRoutes);
 app.use("/inmuebles", inmuebleRoutes);
 
-// 🌍 Servir Angular (Render)
-const frontendPath = path.join(__dirname, "../frontend/dist/frontend/browser");
-app.use(express.static(frontendPath));
-
-// 🧭 Todas las rutas que NO son API → Angular
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
-
-// 🚀 LEVANTAR SERVIDOR AL FINAL
+// 🧩 Conexión base de datos
 const PORT = process.env.PORT || 3000;
-
 (async () => {
   try {
     await db.sequelize.authenticate();
     await db.sequelize.sync();
-    app.listen(PORT, () => {
-      console.log(`🔥 API escuchando en puerto ${PORT}`);
-    });
-  } catch (err) {
-    console.error("❌ Error iniciando servidor:", err);
+    app.listen(PORT, () =>
+      console.log(`✅ API escuchando en http://localhost:${PORT}`)
+    );
+  } catch (e) {
+    console.error("❌ Error iniciando servidor:", e);
     process.exit(1);
   }
 })();
+
+// 🌍 Servir Angular (Render)
+const frontendPath = path.join(__dirname, "../frontend/dist/frontend/browser");
+app.use(express.static(frontendPath));
+
+// ✅ Servir Angular en todas las rutas no API
+app.use((req, res, next) => {
+  if (
+    req.originalUrl.startsWith("/auth") ||
+    req.originalUrl.startsWith("/inmuebles") ||
+    req.originalUrl.startsWith("/uploads")
+  ) {
+    return next(); // deja pasar las rutas de API o estáticos
+  }
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
