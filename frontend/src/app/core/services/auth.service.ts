@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private api = 'https://api-tomas-rivero.onrender.com'; // URL correcta de tu backend desplegado
+  private api = 'https://tomasapi.es'; // URL correcta de tu backend desplegado
 
   private key = 'token';
 
