@@ -18,7 +18,6 @@ import { Navbar } from '../../../shared/components/navbar/navbar';
   standalone: true,
   imports: [
     FormsModule,
-    NgIf,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
