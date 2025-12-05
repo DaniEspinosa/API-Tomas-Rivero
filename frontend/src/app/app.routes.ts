@@ -11,9 +11,9 @@ export const routes: Routes = [
   { path: 'inmueble/:id', component: Detalle },
 
   { path: 'admin/login', component: AdminLogin },
-  { path: 'admin', component: AdminList },
-  { path: 'admin/nuevo', component: AdminForm },
-  { path: 'admin/editar/:id', component: AdminForm },
+  { path: 'admin', component: AdminList, canActivate: [adminGuard] },
+  { path: 'admin/nuevo', component: AdminForm, canActivate: [adminGuard] },
+  { path: 'admin/editar/:id', component: AdminForm, canActivate: [adminGuard] },
 
   { path: '**', redirectTo: '' },
 ];

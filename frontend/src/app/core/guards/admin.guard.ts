@@ -6,8 +6,17 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  if (auth.isLoggedIn()) return true;
+  // 1️⃣ Comprobar si existe token en localStorage (sesión real)
+  const token = localStorage.getItem('token');
 
-  router.navigate(['/admin/login'], { queryParams: { returnUrl: state.url } });
+  if (token && auth.isLoggedIn()) {
+    return true; // ✔️ Puede pasar
+  }
+
+  // 2️⃣ Si no hay sesión → redirigir a login
+  router.navigate(['/admin/login'], {
+    queryParams: { returnUrl: state.url },
+  });
+
   return false;
 };

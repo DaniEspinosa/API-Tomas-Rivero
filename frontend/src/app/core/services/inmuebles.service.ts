@@ -3,12 +3,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Inmueble } from '../models/inmueble.model';
 import { AuthService } from './auth.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class InmueblesService {
   private api = 'https://tomasapi.es/inmuebles';
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
+  constructor(private http: HttpClient, private auth: AuthService, private router: Router) {}
 
   // 🔒 Helper: headers con token
   private getAuthHeaders() {
@@ -18,6 +21,14 @@ export class InmueblesService {
         Authorization: `Bearer ${token}`,
       },
     };
+  }
+
+  private handle401(err: any) {
+    if (err.status === 401) {
+      this.auth.logout();
+      this.router.navigate(['/admin/login']);
+    }
+    return throwError(() => err);
   }
 
   // Listado con filtros opcionales
@@ -44,16 +55,22 @@ export class InmueblesService {
 
   // Crear con FormData (🔒 requiere token)
   createInmueble(data: FormData): Observable<Inmueble> {
-    return this.http.post<Inmueble>(this.api, data, this.getAuthHeaders());
+    return this.http
+      .post<Inmueble>(this.api, data, this.getAuthHeaders())
+      .pipe(catchError((err) => this.handle401(err)));
   }
 
   // Actualizar con FormData (🔒 requiere token)
   updateInmueble(id: number, data: FormData): Observable<Inmueble> {
-    return this.http.put<Inmueble>(`${this.api}/${id}`, data, this.getAuthHeaders());
+    return this.http
+      .put<Inmueble>(`${this.api}/${id}`, data, this.getAuthHeaders())
+      .pipe(catchError((err) => this.handle401(err)));
   }
 
   // Eliminar (🔒 requiere token)
   deleteInmueble(id: number): Observable<any> {
-    return this.http.delete(`${this.api}/${id}`, this.getAuthHeaders());
+    return this.http
+      .delete(`${this.api}/${id}`, this.getAuthHeaders())
+      .pipe(catchError((err) => this.handle401(err)));
   }
 }
