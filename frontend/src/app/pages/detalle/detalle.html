@@ -39,7 +39,8 @@
           {{ inmueble.operacion | titlecase }}
         </li>
         <li>
-          <mat-icon color="primary">home</mat-icon><b> Tipo:</b> {{ inmueble.tipo | titlecase }}
+          <mat-icon color="primary">home</mat-icon><b> Tipo:</b>
+          {{ inmueble.tipo | titlecase | replaceUnderscore }}
         </li>
         <li><mat-icon color="primary">location_on</mat-icon><b> Zona:</b> {{ inmueble.zona }}</li>
         <li>

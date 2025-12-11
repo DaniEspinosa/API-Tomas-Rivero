@@ -11,6 +11,7 @@ import { Navbar } from '../../shared/components/navbar/navbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { ViewportScroller } from '@angular/common';
+import { ReplaceUnderscorePipe } from '../../replace-underscore-pipe';
 
 @Component({
   selector: 'app-detalle',
@@ -23,6 +24,7 @@ import { ViewportScroller } from '@angular/common';
     NgFor,
     MatButtonModule,
     TitleCasePipe,
+    ReplaceUnderscorePipe,
     CurrencyPipe,
     RouterModule,
     MatIconModule,
