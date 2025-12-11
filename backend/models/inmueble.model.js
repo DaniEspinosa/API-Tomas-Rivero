@@ -24,6 +24,7 @@ const Inmueble = sequelize.define("Inmueble", {
       "oficina",
       "local",
       "nave",
+      "habitacion",
       "plaza_garaje",
       "terreno",
       "trastero"

@@ -27,6 +27,7 @@
         <mat-option value="oficina">Oficina</mat-option>
         <mat-option value="local">Local</mat-option>
         <mat-option value="nave">Nave</mat-option>
+        <mat-option value="habitacion">Habitación</mat-option>
         <mat-option value="plaza_garaje">Plaza de garaje</mat-option>
         <mat-option value="terreno">Terreno</mat-option>
         <mat-option value="trastero">Trastero</mat-option>
@@ -194,9 +195,11 @@
     </a>
     <mat-card-content>
       <h3>{{ i.titulo }}</h3>
-      <p class="subtitle">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
       <p class="subtitle">
-        🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosUtiles || 0 }} m²
+        {{ i.operacion }} · {{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}
+      </p>
+      <p class="subtitle">
+        🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosConstruidos || 0 }} m²
       </p>
       <p class="precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
     </mat-card-content>

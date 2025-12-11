@@ -17,6 +17,7 @@ export interface Inmueble {
     | 'nave'
     | 'plaza_garaje'
     | 'terreno'
+    | 'habitacion'
     | 'trastero';
 
   zona: string;
