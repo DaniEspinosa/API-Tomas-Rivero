@@ -110,21 +110,28 @@
 
   /* Ocultar los tres botones hasta que se abra el desplegable */
   .fab-btn {
-    display: none;
-    animation: none;
-  }
-
-  /* Mostrar con animación cuando está expandido */
-  .fab-stack.expanded .fab-btn {
-    display: flex;
     width: 48px;
     height: 48px;
-    animation: fabItemIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    animation: none !important;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px) scale(0.85);
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), visibility 0s linear 0.22s;
+    pointer-events: none;
   }
 
-  .fab-stack.expanded .fab-btn:nth-child(1) { animation-delay: 0.12s; }
-  .fab-stack.expanded .fab-btn:nth-child(2) { animation-delay: 0.06s; }
-  .fab-stack.expanded .fab-btn:nth-child(3) { animation-delay: 0s; }
+  /* Mostrar con transición cuando está expandido */
+  .fab-stack.expanded .fab-btn {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), visibility 0s linear 0s;
+  }
+
+  .fab-stack.expanded .fab-btn:nth-child(1) { transition-delay: 0.1s, 0.1s, 0s; }
+  .fab-stack.expanded .fab-btn:nth-child(2) { transition-delay: 0.05s, 0.05s, 0s; }
+  .fab-stack.expanded .fab-btn:nth-child(3) { transition-delay: 0s, 0s, 0s; }
 
   .fab-icon { width: 22px; height: 22px; }
 
@@ -154,8 +161,18 @@
     border-color: rgba(255,255,255,0.2);
   }
 
-  .fab-toggle svg {
+  .toggle-icon {
     width: 24px;
     height: 24px;
+    position: absolute;
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+
+  /* Chat visible por defecto, X oculta */
+  .toggle-chat  { opacity: 1; transform: rotate(0deg) scale(1); }
+  .toggle-close { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+
+  /* Al expandir: chat se oculta, X aparece */
+  .fab-stack.expanded .toggle-chat  { opacity: 0; transform: rotate(90deg) scale(0.5); }
+  .fab-stack.expanded .toggle-close { opacity: 1; transform: rotate(0deg) scale(1); }
 }

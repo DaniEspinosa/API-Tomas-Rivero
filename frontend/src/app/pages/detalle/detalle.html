@@ -17,6 +17,13 @@
     <button class="hero-expand-btn" type="button" (click)="openLightbox(activePhoto)" title="Ver a pantalla completa">
       <mat-icon>fullscreen</mat-icon>
     </button>
+
+    @if (inmueble.estadoVenta === 'vendido' || inmueble.estadoVenta === 'alquilado') {
+      <div class="estado-venta-pill">
+        <mat-icon>{{ inmueble.estadoVenta === 'vendido' ? 'sell' : 'key' }}</mat-icon>
+        {{ inmueble.estadoVenta === 'vendido' ? 'Vendido' : 'Alquilado' }}
+      </div>
+    }
   </div>
 
   <!-- TITLE STRIP -->

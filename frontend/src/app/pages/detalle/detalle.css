@@ -32,6 +32,32 @@
   );
 }
 
+/* Pill de estado vendido / alquilado — centrado arriba */
+.estado-venta-pill {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(20, 10, 10, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(209, 160, 0, 0.45);
+  border-radius: 100px;
+  padding: 0.5rem 1.25rem;
+  color: #d1a000;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 11;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
 .hero-badges {
   position: absolute;
   bottom: 1.5rem;

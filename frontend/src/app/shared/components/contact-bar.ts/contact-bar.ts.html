@@ -30,18 +30,14 @@
 
     <!-- Botón toggle solo visible en móvil -->
     <button class="fab-toggle" (click)="toggle()" [attr.aria-label]="expanded ? 'Cerrar contacto' : 'Contactar'">
-      @if (expanded) {
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      } @else {
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <!-- Persona (busto) -->
-          <path d="M9 12c2.21 0 4-1.79 4-4S11.21 4 9 4 5 5.79 5 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1h12.73c-.36-.64-.57-1.29-.65-1.94C12.38 16.39 10.84 14 9 14z"/>
-          <!-- Bocadillo -->
-          <path d="M22 11.5C22 9.57 20.43 8 18.5 8h-3C13.57 8 12 9.57 12 11.5S13.57 15 15.5 15H16l-1 2 2.5-2h.5c1.93 0 3.5-1.57 3.5-3.5z"/>
-        </svg>
-      }
+      <!-- Icono chat: visible cuando está cerrado -->
+      <svg class="toggle-icon toggle-chat" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      </svg>
+      <!-- Icono X: visible cuando está abierto -->
+      <svg class="toggle-icon toggle-close" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
     </button>
 
   </div>
