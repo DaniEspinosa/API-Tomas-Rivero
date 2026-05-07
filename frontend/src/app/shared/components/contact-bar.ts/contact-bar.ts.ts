@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ContactBarTs implements OnInit, OnDestroy {
   visible = false;
+  expanded = false;
   private timer: any;
 
   ngOnInit() {
@@ -23,5 +24,9 @@ export class ContactBarTs implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     clearTimeout(this.timer);
+  }
+
+  toggle() {
+    this.expanded = !this.expanded;
   }
 }

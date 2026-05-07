@@ -9,6 +9,17 @@
   }
 }
 
+@keyframes fabItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .fab-stack {
   position: fixed;
   bottom: 28px;
@@ -20,6 +31,7 @@
   z-index: 900;
 }
 
+/* ── Desktop: siempre visibles, animación al aparecer ── */
 .fab-btn {
   position: relative;
   display: flex;
@@ -57,7 +69,7 @@
   height: 100%;
 }
 
-/* Label tooltip that slides in from right */
+/* Label tooltip (desktop) */
 .fab-label {
   position: absolute;
   right: 66px;
@@ -91,37 +103,32 @@
   transform: translateX(0);
 }
 
-/* Phone */
+/* Colores */
 .fab-phone {
   background: #4a1f1f;
   color: #fff;
   border: 2px solid rgba(209, 160, 0, 0.4);
 }
+.fab-phone:hover { background: #3a1818; }
 
-.fab-phone:hover {
-  background: #3a1818;
-}
-
-/* Email */
 .fab-email {
   background: #d1a000;
   color: #fff;
 }
+.fab-email:hover { background: #7a5f00; }
 
-.fab-email:hover {
-  background: #7a5f00;
-}
-
-/* WhatsApp */
 .fab-whatsapp {
   background: #25D366;
   color: #fff;
 }
+.fab-whatsapp:hover { background: #1dba57; }
 
-.fab-whatsapp:hover {
-  background: #1dba57;
+/* Botón toggle: oculto en desktop */
+.fab-toggle {
+  display: none;
 }
 
+/* ── Móvil ── */
 @media (max-width: 480px) {
   .fab-stack {
     bottom: 18px;
@@ -129,9 +136,31 @@
     gap: 10px;
   }
 
+  /* Ocultar los tres botones por defecto en móvil */
   .fab-btn {
     width: 48px;
     height: 48px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px) scale(0.85);
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: none;
+  }
+
+  /* Cuando está expandido, mostrarlos con stagger */
+  .fab-stack.expanded .fab-btn {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .fab-stack.expanded .fab-btn:nth-child(1) { transition-delay: 0.1s; }
+  .fab-stack.expanded .fab-btn:nth-child(2) { transition-delay: 0.05s; }
+  .fab-stack.expanded .fab-btn:nth-child(3) { transition-delay: 0s; }
+
+  /* Ocultar labels en móvil (no hay hover táctil) */
+  .fab-label {
+    display: none;
   }
 
   .fab-icon {
@@ -139,7 +168,31 @@
     height: 22px;
   }
 
-  .fab-label {
-    display: none;
+  /* Mostrar botón toggle */
+  .fab-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #4a1f1f;
+    color: #fff;
+    border: 2px solid rgba(209, 160, 0, 0.5);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    animation: fabIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transition: background 0.2s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+  }
+
+  .fab-stack.expanded .fab-toggle {
+    background: #1a1a1a;
+    transform: rotate(0deg);
+  }
+
+  .fab-toggle svg {
+    width: 22px;
+    height: 22px;
   }
 }
