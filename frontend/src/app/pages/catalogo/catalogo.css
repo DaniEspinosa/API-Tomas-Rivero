@@ -603,31 +603,6 @@ mat-card-content h3 {
   background: rgba(209, 160, 0, 0.07) !important;
 }
 
-/* ===========================
-   WHATSAPP FLOAT
-=========================== */
-.whatsapp-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: #25d366;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
-  z-index: 9999;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.whatsapp-float img { width: 30px; height: 30px; }
-
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55);
-}
 
 /* ===========================
    RESPONSIVE
@@ -646,8 +621,6 @@ mat-card-content h3 {
   .panel-inner { gap: 1rem 1.5rem; padding: 1rem 1.25rem 1.25rem; }
   .panel-apply { margin-left: 0; flex-basis: 100%; justify-content: flex-end; }
   .grid { padding: 1.5rem 1rem; gap: 1rem; }
-  .whatsapp-float { display: flex; }
-  app-contact-bar { display: none !important; }
 }
 
 /* ===========================

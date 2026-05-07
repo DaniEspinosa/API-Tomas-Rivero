@@ -714,34 +714,6 @@
   margin: 0;
 }
 
-/* ===========================
-   WHATSAPP FLOAT (mobile)
-=========================== */
-.whatsapp-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: #25d366;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
-  z-index: 9999;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.whatsapp-float img {
-  width: 30px;
-  height: 30px;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55);
-}
 
 /* ===========================
    RESPONSIVE
@@ -784,8 +756,6 @@
     grid-template-columns: 1fr;
   }
 
-  .whatsapp-float { display: flex; }
-  app-contact-bar { display: none !important; }
 }
 
 @media (max-width: 480px) {
