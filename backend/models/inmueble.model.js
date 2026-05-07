@@ -78,7 +78,14 @@ const Inmueble = sequelize.define("Inmueble", {
 
   ascensor: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
 
-  fotoPrincipal: { type: DataTypes.STRING }, // ruta en /uploads
+  estadoVenta: {
+    type: DataTypes.ENUM('disponible', 'reservado', 'vendido', 'alquilado'),
+    allowNull: false,
+    defaultValue: 'disponible',
+  },
+
+  fotoPrincipal: { type: DataTypes.STRING },
+  fotos: { type: DataTypes.JSON, allowNull: true },
   urlIdealista: { type: DataTypes.STRING },
 });
 

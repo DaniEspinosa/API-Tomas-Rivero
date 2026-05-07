@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InmueblesService } from '../../../core/services/inmuebles.service';
 import { Inmueble } from '../../../core/models/inmueble.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { Footer } from '../../../shared/components/footer/footer';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 
@@ -17,13 +16,14 @@ import { Navbar } from '../../../shared/components/navbar/navbar';
   selector: 'app-admin-form',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule,
     MatCheckboxModule,
-    MatSnackBarModule,
+    MatIconModule,
+    RouterModule,
     Navbar,
     Footer,
   ],
@@ -52,18 +52,21 @@ export class AdminForm implements OnInit {
     gastosComunidad: undefined,
     caracteristicas: [],
     ascensor: false,
+    estadoVenta: 'disponible',
     fotoPrincipal: '',
     urlIdealista: '',
   };
 
   selectedFile: File | null = null;
+  selectedPhotos: File[] = [];
   loading = false;
+  toast: { message: string; type: 'success' | 'error' } | null = null;
+  private toastTimer: any;
 
   constructor(
-    private api: InmueblesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private snack: MatSnackBar
+    private readonly api: InmueblesService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -71,25 +74,29 @@ export class AdminForm implements OnInit {
     if (idParam) {
       this.id = Number(idParam);
       this.api.getInmueble(this.id).subscribe((i) => {
-        // Si viene como string JSON en caracteristicas -> parseamos
         if (typeof i.caracteristicas === 'string') {
-          try {
-            i.caracteristicas = JSON.parse(i.caracteristicas);
-          } catch {
-            i.caracteristicas = [];
-          }
+          try { i.caracteristicas = JSON.parse(i.caracteristicas); }
+          catch { i.caracteristicas = []; }
         }
         this.model = i;
       });
     }
   }
 
-  // 📸 Capturamos el archivo del input
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
+    if (input.files && input.files.length > 0) this.selectedFile = input.files[0];
+  }
+
+  onPhotosSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) this.selectedPhotos = Array.from(input.files);
+  }
+
+  mostrarToast(message: string, type: 'success' | 'error') {
+    clearTimeout(this.toastTimer);
+    this.toast = { message, type };
+    this.toastTimer = setTimeout(() => (this.toast = null), 3500);
   }
 
   guardar() {
@@ -108,58 +115,34 @@ export class AdminForm implements OnInit {
     formData.append('metrosParcela', this.model.metrosParcela?.toString() ?? '0');
     formData.append('precio', this.model.precio?.toString() ?? '0');
     formData.append('estado', this.model.estado || 'en buen estado');
-
-    if (this.model.orientacion) {
-      formData.append('orientacion', this.model.orientacion);
-    }
-
-    if (this.model.anoConstruccion != null) {
-      formData.append('anoConstruccion', this.model.anoConstruccion.toString());
-    }
-
+    if (this.model.orientacion) formData.append('orientacion', this.model.orientacion);
+    if (this.model.anoConstruccion != null) formData.append('anoConstruccion', this.model.anoConstruccion.toString());
     formData.append('calefaccion', this.model.calefaccion || 'no disponible');
-
-    if (this.model.gastosComunidad != null) {
-      formData.append('gastosComunidad', this.model.gastosComunidad.toString());
-    }
-
+    if (this.model.gastosComunidad != null) formData.append('gastosComunidad', this.model.gastosComunidad.toString());
     formData.append('ascensor', this.model.ascensor ? 'true' : 'false');
-
     if (this.model.caracteristicas && this.model.caracteristicas.length > 0) {
       formData.append('caracteristicas', JSON.stringify(this.model.caracteristicas));
     }
-
+    formData.append('estadoVenta', this.model.estadoVenta || 'disponible');
     formData.append('urlIdealista', this.model.urlIdealista || '');
+    if (this.selectedFile) formData.append('fotoPrincipal', this.selectedFile);
+    for (const photo of this.selectedPhotos) formData.append('fotos', photo);
 
-    if (this.selectedFile) {
-      formData.append('fotoPrincipal', this.selectedFile);
-    }
-
-    const obs = this.id
-      ? this.api.updateInmueble(this.id, formData)
-      : this.api.createInmueble(formData);
+    const obs = this.id ? this.api.updateInmueble(this.id, formData) : this.api.createInmueble(formData);
 
     obs.subscribe({
       next: () => {
         this.loading = false;
-        this.snack.open(
-          this.id ? '✅ Inmueble actualizado con éxito' : '✅ Inmueble creado con éxito',
-          'Cerrar',
-          { duration: 3000, panelClass: 'snackbar-success' }
-        );
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/admin'], {
+          state: { toast: this.id ? 'Inmueble actualizado con éxito' : 'Inmueble creado con éxito' },
+        });
       },
       error: () => {
         this.loading = false;
-        this.snack.open('❌ Error guardando inmueble', 'Cerrar', {
-          duration: 3000,
-          panelClass: 'snackbar-error',
-        });
+        this.mostrarToast('Error guardando el inmueble', 'error');
       },
     });
   }
 
-  cancelar() {
-    this.router.navigate(['/admin']);
-  }
+  cancelar() { this.router.navigate(['/admin']); }
 }

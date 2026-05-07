@@ -4,13 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { NgIf } from '@angular/common';
-
 @Component({
   selector: 'app-admin-login',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, NgIf],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './admin-login.html',
   styleUrls: ['./admin-login.scss'],
 })

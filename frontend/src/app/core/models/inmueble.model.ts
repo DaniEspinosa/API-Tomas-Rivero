@@ -37,6 +37,8 @@ export interface Inmueble {
   caracteristicas?: string[];
   ascensor?: boolean;
 
+  estadoVenta?: 'disponible' | 'reservado' | 'vendido' | 'alquilado';
   fotoPrincipal?: string;
+  fotos?: string[];
   urlIdealista?: string;
 }

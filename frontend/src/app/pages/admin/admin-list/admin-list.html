@@ -1,43 +1,126 @@
 <app-navbar></app-navbar>
 
-<div class="admin-container">
-  <div class="toolbar">
-    <h2>📋 Gestión de inmuebles</h2>
-    <button mat-raised-button color="primary" (click)="nuevo()">+ Nuevo</button>
+<div class="admin-wrap">
+
+  <div class="admin-header">
+    <div class="admin-header-left">
+      <h1>Gestión de inmuebles</h1>
+      @if (!loading) {
+        <span class="count-badge">{{ inmueblesActivos.length }} disponibles · {{ inmueblesCerrados.length }} cerradas</span>
+      }
+    </div>
+    <button class="btn-nuevo" (click)="nuevo()">
+      <mat-icon>add</mat-icon> Nuevo inmueble
+    </button>
   </div>
 
-  <div *ngIf="loading" class="loading">Cargando inmuebles...</div>
+  @if (loading) {
+    <div class="loading-state">
+      <mat-icon>hourglass_empty</mat-icon>
+      <p>Cargando...</p>
+    </div>
+  }
 
-  <div class="grid">
-    <mat-card class="card" *ngFor="let i of inmuebles">
-      <img
-        mat-card-image
-        [src]="
-          i.fotoPrincipal
-            ? 'https://tomasapi.es' + i.fotoPrincipal
-            : 'https://picsum.photos/seed/fallback/800/450'
-        "
-        alt="foto"
-      />
+  @if (!loading && inmuebles.length === 0) {
+    <div class="empty-state">
+      <mat-icon>home_work</mat-icon>
+      <p>No hay inmuebles todavía</p>
+      <button class="btn-nuevo" (click)="nuevo()">Crear el primero</button>
+    </div>
+  }
 
-      <mat-card-content class="card-content">
-        <h3>{{ i.titulo }}</h3>
-        <p class="subtitle">
-          {{ i.operacion | titlecase }} · {{ i.tipo | replaceUnderscore | titlecase }} ·
-          {{ i.zona }}
-        </p>
-        <p class="subtitle">
-          🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosConstruidos || 0 }} m²
-        </p>
-        <p class="precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
-      </mat-card-content>
-
-      <mat-card-actions class="card-actions">
-        <button mat-stroked-button color="primary" (click)="editar(i)">✏ Editar</button>
-        <button mat-stroked-button color="warn" (click)="eliminar(i)">🗑 Eliminar</button>
-      </mat-card-actions>
-    </mat-card>
+  <!-- Propiedades activas -->
+  <div class="inmueble-list">
+    @for (i of inmueblesActivos; track i.id) {
+      <div class="inmueble-row">
+        <div class="row-img">
+          <img [src]="i.fotoPrincipal ? BASE + i.fotoPrincipal : 'https://picsum.photos/seed/' + i.id + '/300/200'" alt="foto" />
+          <span class="badge-op" [class.venta]="i.operacion === 'venta'" [class.alquiler]="i.operacion === 'alquiler'">
+            {{ i.operacion }}
+          </span>
+          @if (i.estadoVenta === 'reservado') {
+            <span class="badge-reservado">Reservado</span>
+          }
+        </div>
+        <div class="row-info">
+          <h3>{{ i.titulo }}</h3>
+          <p class="row-meta">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
+          <div class="row-specs">
+            <span><mat-icon>king_bed</mat-icon>{{ i.dormitorios }}</span>
+            <span><mat-icon>bathtub</mat-icon>{{ i.banos || 0 }}</span>
+            <span><mat-icon>straighten</mat-icon>{{ i.metrosConstruidos || 0 }} m²</span>
+          </div>
+        </div>
+        <p class="row-price">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+        <div class="row-actions">
+          <button class="btn-edit" (click)="editar(i)"><mat-icon>edit</mat-icon><span class="btn-edit-text">Editar</span></button>
+          <button class="btn-delete" (click)="eliminar(i)" title="Eliminar"><mat-icon>delete</mat-icon></button>
+        </div>
+      </div>
+    }
   </div>
+
+  <!-- Propiedades cerradas -->
+  @if (inmueblesCerrados.length > 0) {
+    <div class="cerradas-divider">
+      <span>Operaciones cerradas</span>
+    </div>
+    <div class="inmueble-list">
+      @for (i of inmueblesCerrados; track i.id) {
+        <div class="inmueble-row inmueble-row--cerrado">
+          <div class="row-img">
+            <img [src]="i.fotoPrincipal ? BASE + i.fotoPrincipal : 'https://picsum.photos/seed/' + i.id + '/300/200'" alt="foto" />
+            <span class="badge-cerrado" [class.vendido]="i.estadoVenta === 'vendido'" [class.alquilado]="i.estadoVenta === 'alquilado'">
+              {{ i.estadoVenta === 'vendido' ? 'Vendido' : 'Alquilado' }}
+            </span>
+          </div>
+          <div class="row-info">
+            <h3>{{ i.titulo }}</h3>
+            <p class="row-meta">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
+            <div class="row-specs">
+              <span><mat-icon>king_bed</mat-icon>{{ i.dormitorios }}</span>
+              <span><mat-icon>bathtub</mat-icon>{{ i.banos || 0 }}</span>
+              <span><mat-icon>straighten</mat-icon>{{ i.metrosConstruidos || 0 }} m²</span>
+            </div>
+          </div>
+          <p class="row-price">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+          <div class="row-actions">
+            <button class="btn-edit" (click)="editar(i)"><mat-icon>edit</mat-icon><span class="btn-edit-text">Editar</span></button>
+            <button class="btn-delete" (click)="eliminar(i)" title="Eliminar"><mat-icon>delete</mat-icon></button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
 </div>
 
 <app-footer></app-footer>
+
+<!-- MODAL CONFIRMACIÓN ELIMINAR -->
+@if (inmuebleToDelete) {
+  <div class="confirm-overlay" (click)="cancelarEliminar()" (keydown.escape)="cancelarEliminar()" tabindex="-1">
+    <dialog class="confirm-dialog" open (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+      <div class="confirm-icon">
+        <mat-icon>delete_forever</mat-icon>
+      </div>
+      <h3>¿Eliminar esta propiedad?</h3>
+      <p class="confirm-titulo">{{ inmuebleToDelete.titulo }}</p>
+      <p class="confirm-warn">Esta acción no se puede deshacer.</p>
+      <div class="confirm-actions">
+        <button class="btn-cancel-confirm" (click)="cancelarEliminar()">Cancelar</button>
+        <button class="btn-confirm-delete" (click)="confirmarEliminar()">
+          <mat-icon>delete</mat-icon> Sí, eliminar
+        </button>
+      </div>
+    </dialog>
+  </div>
+}
+
+<!-- TOAST -->
+@if (toast) {
+  <div class="toast" [class.toast-success]="toast.type === 'success'" [class.toast-error]="toast.type === 'error'">
+    <mat-icon>{{ toast.type === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+    {{ toast.message }}
+  </div>
+}

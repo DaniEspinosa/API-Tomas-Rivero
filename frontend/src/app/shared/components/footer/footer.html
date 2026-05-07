@@ -1,11 +1,21 @@
 <footer class="footer">
   <div class="footer-content">
-    <p>© {{ currentYear }} Tomas Rivero API - Todos los derechos reservados</p>
-    <div class="footer-links">
-      <a href="mailto:tomas.rivero.matarredona@tomasapi.es"
-        >📧 tomas.rivero.matarredona@tomasapi.es</a
-      >
-      <a href="tel:+34670950002">📞 +34 670 950 002</a>
+    <div class="footer-brand">
+      <p>Agencia inmobiliaria de confianza</p>
+      <strong>Tomás Rivero Matarredona</strong>
     </div>
+    <div class="footer-contact">
+      <a href="tel:+34670950002">📞 +34 670 950 002</a>
+      <a href="mailto:tomas.rivero.matarredona@tomasapi.es">✉ tomas.rivero.matarredona@tomasapi.es</a>
+    </div>
+  </div>
+  <hr class="footer-divider" />
+  <div class="footer-bottom">
+    <p>© {{ currentYear }} Tomás Rivero — Todos los derechos reservados</p>
+    <nav class="footer-legal">
+      <a routerLink="/aviso-legal">Aviso legal</a>
+      <span class="footer-legal-sep">·</span>
+      <a routerLink="/politica-privacidad">Política de privacidad</a>
+    </nav>
   </div>
 </footer>

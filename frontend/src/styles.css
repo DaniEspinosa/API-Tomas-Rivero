@@ -1,10 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-html,
-body {
-  height: 100%;
+:root {
+  --gold: #d1a000;
+  --gold-hover: #b88c00;
+  --wine: #4a1f1f;
+  --wine-dark: #361515;
+  --cream: #faf8f4;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --text-muted: #666666;
+  --border: #ede7dc;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 10px 36px rgba(0, 0, 0, 0.14);
+  --radius: 12px;
+  --radius-sm: 8px;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+h1, h2, h3, h4 {
+  font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+  font-weight: 700;
+}
+
+a { text-decoration: none; }

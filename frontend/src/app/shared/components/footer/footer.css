@@ -1,35 +1,102 @@
 .footer {
-  background: #4a1f1f; /* color secundario */
+  background: #4a1f1f;
   color: #fff;
-  text-align: center;
-  padding: 2rem 1rem;
-  border-top: 4px solid #d1a000; /* borde con color principal */
+  padding: 3rem 2rem 2rem;
+  border-top: 3px solid #d1a000;
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: auto;
-}
-
-.footer p {
-  margin: 0 0 1rem;
-  font-weight: 500;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 2rem;
+  align-items: center;
+}
+
+.footer-brand p {
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.02em;
+}
+
+.footer-brand strong {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #d1a000;
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.footer-contact a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.footer-contact a:hover { color: #d1a000; }
+
+.footer-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2rem 0 1.25rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
-.footer-links a {
-  color: #d1a000; /* enlaces en color principal */
-  font-weight: bold;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.footer-bottom p {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
 }
 
-.footer-links a:hover {
-  color: #fff; /* hover en blanco para contraste */
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-legal a {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-legal a:hover { color: #d1a000; }
+
+.footer-legal-sep {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 640px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+  .footer-contact {
+    align-items: flex-start;
+  }
 }

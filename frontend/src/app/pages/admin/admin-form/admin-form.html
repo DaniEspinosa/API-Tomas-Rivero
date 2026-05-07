@@ -1,180 +1,250 @@
 <app-navbar></app-navbar>
 
-<div class="form-container">
-  <div class="form-card">
-    <h2>{{ id ? 'Editar inmueble' : 'Nuevo inmueble' }}</h2>
+<div class="form-wrap">
 
-    <form (ngSubmit)="guardar()" class="form" enctype="multipart/form-data">
-      <!-- Operación -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Operación</mat-label>
-        <mat-select [(ngModel)]="model.operacion" name="operacion" required>
-          <mat-option value="venta">Venta</mat-option>
-          <mat-option value="alquiler">Alquiler</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Tipo -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Tipo</mat-label>
-        <mat-select [(ngModel)]="model.tipo" name="tipo" required>
-          <mat-option value="piso">Piso</mat-option>
-          <mat-option value="atico">Ático</mat-option>
-          <mat-option value="duplex">Dúplex</mat-option>
-          <mat-option value="estudio">Estudio</mat-option>
-          <mat-option value="chalet_pareado">Chalet pareado</mat-option>
-          <mat-option value="chalet_adosado">Chalet adosado</mat-option>
-          <mat-option value="casa_independiente">Casa independiente</mat-option>
-          <mat-option value="oficina">Oficina</mat-option>
-          <mat-option value="local">Local</mat-option>
-          <mat-option value="nave">Nave</mat-option>
-          <mat-option value="habitacion">Habitación</mat-option>
-          <mat-option value="plaza_garaje">Plaza garaje</mat-option>
-          <mat-option value="terreno">Terreno</mat-option>
-          <mat-option value="trastero">Trastero</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Título -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Título</mat-label>
-        <input matInput [(ngModel)]="model.titulo" name="titulo" required />
-      </mat-form-field>
-
-      <!-- Descripción -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Descripción</mat-label>
-        <textarea matInput rows="4" [(ngModel)]="model.descripcion" name="descripcion"></textarea>
-      </mat-form-field>
-
-      <!-- Zona -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Zona</mat-label>
-        <input matInput [(ngModel)]="model.zona" name="zona" />
-      </mat-form-field>
-
-      <!-- Dormitorios -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Dormitorios</mat-label>
-        <input matInput type="number" [(ngModel)]="model.dormitorios" name="dormitorios" />
-      </mat-form-field>
-
-      <!-- Baños -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Baños</mat-label>
-        <input matInput type="number" [(ngModel)]="model.banos" name="banos" />
-      </mat-form-field>
-
-      <!-- Metros Utiles-->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Metros Utiles</mat-label>
-        <input matInput type="number" [(ngModel)]="model.metrosUtiles" name="metrosUtiles" />
-      </mat-form-field>
-
-      <!-- Metros Construidos-->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Metros Construidos</mat-label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.metrosConstruidos"
-          name="metrosConstruidos"
-        />
-      </mat-form-field>
-
-      <!-- Metros Construidos-->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Metros Parcela</mat-label>
-        <input matInput type="number" [(ngModel)]="model.metrosParcela" name="metrosParcela" />
-      </mat-form-field>
-
-      <!-- Precio -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Precio (€)</mat-label>
-        <input matInput type="number" [(ngModel)]="model.precio" name="precio" />
-      </mat-form-field>
-
-      <!-- Estado -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="model.estado" name="estado">
-          <mat-option value="en buen estado">En buen estado</mat-option>
-          <mat-option value="a reformar">A reformar</mat-option>
-          <mat-option value="obra nueva">Obra nueva</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Orientación -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Orientación</mat-label>
-        <mat-select [(ngModel)]="model.orientacion" name="orientacion">
-          <mat-option value="norte">Norte</mat-option>
-          <mat-option value="sur">Sur</mat-option>
-          <mat-option value="este">Este</mat-option>
-          <mat-option value="oeste">Oeste</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Año construcción -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Año construcción</mat-label>
-        <input matInput type="number" [(ngModel)]="model.anoConstruccion" name="anoConstruccion" />
-      </mat-form-field>
-
-      <!-- Calefacción -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Calefacción</mat-label>
-        <mat-select [(ngModel)]="model.calefaccion" name="calefaccion">
-          <mat-option value="individual">Individual</mat-option>
-          <mat-option value="central">Central</mat-option>
-          <mat-option value="no disponible">No disponible</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Gastos comunidad -->
-      <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Gastos comunidad (€)</mat-label>
-        <input matInput type="number" [(ngModel)]="model.gastosComunidad" name="gastosComunidad" />
-      </mat-form-field>
-
-      <!-- Características -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Características</mat-label>
-        <mat-select [(ngModel)]="model.caracteristicas" name="caracteristicas" multiple>
-          <mat-option value="armarios empotrados">Armarios empotrados</mat-option>
-          <mat-option value="aire acondicionado">Aire acondicionado</mat-option>
-          <mat-option value="terraza">Terraza</mat-option>
-          <mat-option value="balcon">Balcón</mat-option>
-          <mat-option value="trastero">Trastero</mat-option>
-          <mat-option value="piscina">Piscina</mat-option>
-          <mat-option value="jardin">Jardin</mat-option>
-          <mat-option value="plaza de garaje">Plaza de garaje</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Ascensor -->
-      <mat-checkbox [(ngModel)]="model.ascensor" name="ascensor">Ascensor</mat-checkbox>
-
-      <!-- Foto -->
-      <div class="file-field">
-        <label for="foto">Foto principal</label>
-        <input type="file" id="foto" (change)="onFileSelected($event)" />
-      </div>
-
-      <!-- URL Idealista -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>URL Idealista</mat-label>
-        <input matInput [(ngModel)]="model.urlIdealista" name="urlIdealista" />
-      </mat-form-field>
-
-      <div class="actions">
-        <button mat-raised-button color="primary" [disabled]="loading">
-          {{ id ? 'Guardar cambios' : 'Crear inmueble' }}
-        </button>
-        <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
-      </div>
-    </form>
+  <div class="form-header">
+    <div>
+      <h1>{{ id ? 'Editar inmueble' : 'Nuevo inmueble' }}</h1>
+      <p class="form-subtitle">{{ id ? 'Modifica los datos del inmueble' : 'Rellena los datos para publicar una nueva propiedad' }}</p>
+    </div>
+    <a class="btn-back" routerLink="/admin">
+      <mat-icon>arrow_back</mat-icon> Volver
+    </a>
   </div>
+
+  <form (ngSubmit)="guardar()" class="form-body" enctype="multipart/form-data">
+
+    <!-- SECCIÓN 1: Información principal -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>info</mat-icon>
+        <h2>Información principal</h2>
+      </div>
+      <div class="fields-grid">
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Operación</mat-label>
+          <mat-select [(ngModel)]="model.operacion" name="operacion" required>
+            <mat-option value="venta">Venta</mat-option>
+            <mat-option value="alquiler">Alquiler</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Tipo de propiedad</mat-label>
+          <mat-select [(ngModel)]="model.tipo" name="tipo" required>
+            <mat-option value="piso">Piso</mat-option>
+            <mat-option value="atico">Ático</mat-option>
+            <mat-option value="duplex">Dúplex</mat-option>
+            <mat-option value="estudio">Estudio</mat-option>
+            <mat-option value="chalet_pareado">Chalet pareado</mat-option>
+            <mat-option value="chalet_adosado">Chalet adosado</mat-option>
+            <mat-option value="casa_independiente">Casa independiente</mat-option>
+            <mat-option value="oficina">Oficina</mat-option>
+            <mat-option value="local">Local</mat-option>
+            <mat-option value="nave">Nave</mat-option>
+            <mat-option value="habitacion">Habitación</mat-option>
+            <mat-option value="plaza_garaje">Plaza garaje</mat-option>
+            <mat-option value="terreno">Terreno</mat-option>
+            <mat-option value="trastero">Trastero</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-full">
+          <mat-label>Título del anuncio</mat-label>
+          <input matInput [(ngModel)]="model.titulo" name="titulo" required placeholder="Ej: Piso luminoso en el centro de Sevilla" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Zona</mat-label>
+          <input matInput [(ngModel)]="model.zona" name="zona" placeholder="Ej: Centro, Triana..." />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Precio (€)</mat-label>
+          <input matInput type="number" [(ngModel)]="model.precio" name="precio" />
+          <span matSuffix>€</span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Estado de venta</mat-label>
+          <mat-select [(ngModel)]="model.estadoVenta" name="estadoVenta">
+            <mat-option value="disponible">🟢 Disponible</mat-option>
+            <mat-option value="reservado">🟡 Reservado</mat-option>
+            <mat-option value="vendido">🔴 Vendido</mat-option>
+            <mat-option value="alquilado">🔴 Alquilado</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-full">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput rows="5" [(ngModel)]="model.descripcion" name="descripcion" placeholder="Describe la propiedad con detalle..."></textarea>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: Detalles físicos -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>straighten</mat-icon>
+        <h2>Detalles y medidas</h2>
+      </div>
+      <div class="fields-grid">
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-third">
+          <mat-label>Dormitorios</mat-label>
+          <input matInput type="number" [(ngModel)]="model.dormitorios" name="dormitorios" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-third">
+          <mat-label>Baños</mat-label>
+          <input matInput type="number" [(ngModel)]="model.banos" name="banos" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-third">
+          <mat-label>Año construcción</mat-label>
+          <input matInput type="number" [(ngModel)]="model.anoConstruccion" name="anoConstruccion" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-third">
+          <mat-label>Metros útiles</mat-label>
+          <input matInput type="number" [(ngModel)]="model.metrosUtiles" name="metrosUtiles" />
+          <span matSuffix>m²</span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-third">
+          <mat-label>Metros construidos</mat-label>
+          <input matInput type="number" [(ngModel)]="model.metrosConstruidos" name="metrosConstruidos" />
+          <span matSuffix>m²</span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-third">
+          <mat-label>Metros parcela</mat-label>
+          <input matInput type="number" [(ngModel)]="model.metrosParcela" name="metrosParcela" />
+          <span matSuffix>m²</span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="model.estado" name="estado">
+            <mat-option value="en buen estado">En buen estado</mat-option>
+            <mat-option value="a reformar">A reformar</mat-option>
+            <mat-option value="obra nueva">Obra nueva</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Orientación</mat-label>
+          <mat-select [(ngModel)]="model.orientacion" name="orientacion">
+            <mat-option value="">—</mat-option>
+            <mat-option value="norte">Norte</mat-option>
+            <mat-option value="sur">Sur</mat-option>
+            <mat-option value="este">Este</mat-option>
+            <mat-option value="oeste">Oeste</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Calefacción</mat-label>
+          <mat-select [(ngModel)]="model.calefaccion" name="calefaccion">
+            <mat-option value="individual">Individual</mat-option>
+            <mat-option value="central">Central</mat-option>
+            <mat-option value="no disponible">No disponible</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-half">
+          <mat-label>Gastos de comunidad</mat-label>
+          <input matInput type="number" [(ngModel)]="model.gastosComunidad" name="gastosComunidad" />
+          <span matSuffix>€/mes</span>
+        </mat-form-field>
+
+        <div class="col-full checkbox-row">
+          <mat-checkbox [(ngModel)]="model.ascensor" name="ascensor">Tiene ascensor</mat-checkbox>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: Extras -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>star</mat-icon>
+        <h2>Características adicionales</h2>
+      </div>
+      <div class="fields-grid">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-full">
+          <mat-label>Selecciona características</mat-label>
+          <mat-select [(ngModel)]="model.caracteristicas" name="caracteristicas" multiple>
+            <mat-option value="armarios empotrados">Armarios empotrados</mat-option>
+            <mat-option value="aire acondicionado">Aire acondicionado</mat-option>
+            <mat-option value="terraza">Terraza</mat-option>
+            <mat-option value="balcon">Balcón</mat-option>
+            <mat-option value="trastero">Trastero</mat-option>
+            <mat-option value="piscina">Piscina</mat-option>
+            <mat-option value="jardin">Jardín</mat-option>
+            <mat-option value="plaza de garaje">Plaza de garaje</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 4: Multimedia -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>photo_library</mat-icon>
+        <h2>Multimedia</h2>
+      </div>
+      <div class="fields-grid">
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="col-full">
+          <mat-label>URL Idealista</mat-label>
+          <input matInput [(ngModel)]="model.urlIdealista" name="urlIdealista" placeholder="https://www.idealista.com/..." />
+          <mat-icon matSuffix>link</mat-icon>
+        </mat-form-field>
+
+        <div class="col-half upload-field">
+          <label class="upload-label">Foto principal</label>
+          <label class="upload-btn" for="foto">
+            <mat-icon>upload</mat-icon>
+            <span>{{ selectedFile ? selectedFile.name : 'Seleccionar imagen' }}</span>
+          </label>
+          <input type="file" id="foto" accept="image/*" (change)="onFileSelected($event)" hidden />
+          @if (model.fotoPrincipal && !selectedFile) {
+            <p class="upload-hint">Ya tiene foto. Selecciona otra para reemplazarla.</p>
+          }
+        </div>
+
+        <div class="col-half upload-field">
+          <label class="upload-label">Fotos adicionales <span class="upload-hint-inline">(máx. 10)</span></label>
+          <label class="upload-btn" for="fotos">
+            <mat-icon>photo_library</mat-icon>
+            <span>{{ selectedPhotos.length > 0 ? selectedPhotos.length + ' foto(s) seleccionada(s)' : 'Seleccionar varias' }}</span>
+          </label>
+          <input type="file" id="fotos" accept="image/*" multiple (change)="onPhotosSelected($event)" hidden />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="loading">
+        <mat-icon>{{ loading ? 'hourglass_empty' : 'save' }}</mat-icon>
+        {{ id ? 'Guardar cambios' : 'Publicar inmueble' }}
+      </button>
+    </div>
+
+  </form>
 </div>
 
 <app-footer></app-footer>
+
+@if (toast) {
+  <div class="toast" [class.toast-success]="toast.type === 'success'" [class.toast-error]="toast.type === 'error'">
+    <mat-icon>{{ toast.type === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+    {{ toast.message }}
+  </div>
+}

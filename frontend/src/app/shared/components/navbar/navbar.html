@@ -3,9 +3,25 @@
     <img src="https://tomasapi.es/uploads/logo.png" alt="Logo" class="logo" />
   </a>
   <span class="spacer"></span>
-  <a mat-button routerLink="/">Inicio</a>
-  <!-- <a mat-button routerLink="/catalogo">Propiedades</a>
-  <a mat-button routerLink="/servicios">Servicios</a>
-  <a mat-button routerLink="/nosotros">Nosotros</a>
-  <a mat-button routerLink="/contacto">Contacto</a> -->
+
+  <!-- Links desktop -->
+  <nav class="nav-links">
+    <a mat-button routerLink="/">Inicio</a>
+    <a mat-button routerLink="/sobre-nosotros">Sobre nosotros</a>
+    <button mat-button class="nav-contactar" (click)="goToContact()">Contactar</button>
+  </nav>
+
+  <!-- Hamburguesa móvil -->
+  <button class="hamburger" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-label="Menú">
+    <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
 </mat-toolbar>
+
+<!-- Menú desplegable móvil -->
+@if (menuOpen) {
+  <div class="mobile-menu">
+    <a class="mobile-menu-link" routerLink="/" (click)="menuOpen = false">Inicio</a>
+    <a class="mobile-menu-link" routerLink="/sobre-nosotros" (click)="menuOpen = false">Sobre nosotros</a>
+    <button class="mobile-menu-link mobile-menu-contactar" type="button" (click)="goToContact()">Contactar</button>
+  </div>
+}

@@ -1,23 +1,47 @@
 .contact-bar {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 28px;
+  right: 28px;
   background: #4a1f1f;
   color: #fff;
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  z-index: 100; /* Valor bajo para que los botones puedan estar por encima */
-}
-.contact-bar a {
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
+  gap: 1.25rem;
+  z-index: 500;
+  box-shadow: 0 4px 20px rgba(74, 31, 31, 0.35);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(209, 160, 0, 0.3);
+  transition: box-shadow 0.2s;
 }
 
+.contact-bar:hover {
+  box-shadow: 0 6px 28px rgba(74, 31, 31, 0.45);
+}
+
+.contact-bar span {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.contact-bar a {
+  color: #d1a000;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.contact-bar a:hover { color: #fff; }
+
 .whatsapp-float {
-  width: 24px;
-  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.whatsapp-float img {
+  width: 22px;
+  height: 22px;
 }

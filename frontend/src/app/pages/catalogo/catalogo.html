@@ -1,26 +1,174 @@
 <app-navbar></app-navbar>
-<!-- Esta version es la wena -->
+
+<!-- HERO LIMPIO -->
 <section class="hero">
-  <h1>Encuentra la propiedad de tus sueños</h1>
-  <form class="search-bar" (ngSubmit)="buscar()">
-    <div class="operacion-toggle">
-      <mat-button-toggle-group
-        [(ngModel)]="f.operacion"
-        name="operacion"
-        aria-label="Tipo de operación"
-        appearance="legacy"
-        (change)="buscar()"
-      >
-        <mat-button-toggle value="">Todos</mat-button-toggle>
-        <mat-button-toggle value="venta">Venta</mat-button-toggle>
-        <mat-button-toggle value="alquiler">Alquiler</mat-button-toggle>
-      </mat-button-toggle-group>
+  <div class="hero-text">
+    <h1>Encuentra la propiedad de tus sueños</h1>
+    <p class="hero-subtitle">Compra, venta y alquiler en las mejores zonas</p>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Ver propiedades</span>
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </div>
+</section>
+
+<!-- BARRA MÓVIL (solo visible en móvil) -->
+<div class="mobile-filter-bar">
+  <div class="mobile-op-pills">
+    <button type="button" class="op-pill" [class.active]="f.operacion === ''" (click)="setOperacion('')">Todos</button>
+    <button type="button" class="op-pill" [class.active]="f.operacion === 'venta'" (click)="setOperacion('venta')">Venta</button>
+    <button type="button" class="op-pill" [class.active]="f.operacion === 'alquiler'" (click)="setOperacion('alquiler')">Alquiler</button>
+  </div>
+  <button type="button" class="mobile-filter-btn" (click)="showMobileFilters = true">
+    <mat-icon>tune</mat-icon>
+    Filtrar
+    @if (activeFilterCount > 0) {
+      <span class="filter-badge">{{ activeFilterCount }}</span>
+    }
+  </button>
+</div>
+
+<!-- PANEL MÓVIL -->
+@if (showMobileFilters) {
+  <div class="mobile-sheet-overlay" [class.closing]="closingSheet" (click)="closeSheet()" (keydown.escape)="closeSheet()" tabindex="-1"></div>
+  <div class="mobile-sheet" [class.closing]="closingSheet">
+    <div class="mobile-sheet-header">
+      <span class="mobile-sheet-title">Filtros</span>
+      <button type="button" class="mobile-sheet-close" (click)="closeSheet()"><mat-icon>close</mat-icon></button>
+    </div>
+    <div class="mobile-sheet-body">
+
+      <div class="mobile-filter-group">
+        <span class="panel-label">Tipo de propiedad</span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-full-field">
+          <mat-label>Tipo</mat-label>
+          <mat-select [(ngModel)]="f.tipo" name="tipo-m">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option value="pisos">Pisos, Áticos y Dúplex</mat-option>
+            <mat-option value="chalets">Chalets y Casas</mat-option>
+            <mat-option value="oficina">Oficina</mat-option>
+            <mat-option value="local">Local</mat-option>
+            <mat-option value="nave">Nave</mat-option>
+            <mat-option value="habitacion">Habitación</mat-option>
+            <mat-option value="plaza_garaje">Plaza de garaje</mat-option>
+            <mat-option value="terreno">Terreno</mat-option>
+            <mat-option value="trastero">Trastero</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="mobile-filter-group">
+        <span class="panel-label">Zona</span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-full-field">
+          <mat-label>Zona</mat-label>
+          <input matInput [(ngModel)]="f.zona" name="zona-m" placeholder="Centro, Norte..." [matAutocomplete]="autoZonaM" (ngModelChange)="filterZonas($event)" (focus)="onZonaFocus()" />
+          <mat-autocomplete #autoZonaM="matAutocomplete" (optionSelected)="onZonaSelected($event.option.value)">
+            @for (z of filteredZonas; track z) {
+              <mat-option [value]="z">{{ z }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="mobile-filter-group">
+        <span class="panel-label">Precio</span>
+        <div class="mobile-filter-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-half-field">
+            <mat-label>Desde</mat-label>
+            <mat-select [(ngModel)]="f.precioMin" name="precioMin-m">
+              <mat-option value="">Sin límite</mat-option>
+              @for (p of precios; track p) { <mat-option [value]="p">{{ p | number }} €</mat-option> }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-half-field">
+            <mat-label>Hasta</mat-label>
+            <mat-select [(ngModel)]="f.precioMax" name="precioMax-m">
+              <mat-option value="">Sin límite</mat-option>
+              @for (p of precios; track p) { <mat-option [value]="p">{{ p | number }} €</mat-option> }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mobile-filter-group">
+        <span class="panel-label">Habitaciones</span>
+        <div class="mobile-filter-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-half-field">
+            <mat-label>Mín</mat-label>
+            <mat-select [(ngModel)]="f.dormitoriosMin" name="dormMin-m">
+              <mat-option value="">—</mat-option>
+              @for (d of dormitorios; track d) { <mat-option [value]="d">{{ d }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-half-field">
+            <mat-label>Máx</mat-label>
+            <mat-select [(ngModel)]="f.dormitoriosMax" name="dormMax-m">
+              <mat-option value="">—</mat-option>
+              @for (d of dormitorios; track d) { <mat-option [value]="d">{{ d }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mobile-filter-group">
+        <span class="panel-label">Baños</span>
+        <div class="mobile-filter-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-half-field">
+            <mat-label>Mín</mat-label>
+            <mat-select [(ngModel)]="f.banosMin" name="banosMin-m">
+              <mat-option value="">—</mat-option>
+              @for (b of banos; track b) { <mat-option [value]="b">{{ b }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-half-field">
+            <mat-label>Máx</mat-label>
+            <mat-select [(ngModel)]="f.banosMax" name="banosMax-m">
+              <mat-option value="">—</mat-option>
+              @for (b of banos; track b) { <mat-option [value]="b">{{ b }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mobile-filter-group">
+        <span class="panel-label">Estado</span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mobile-full-field">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="f.estado" name="estado-m">
+            <mat-option value="">Cualquiera</mat-option>
+            <mat-option value="obra nueva">Obra nueva</mat-option>
+            <mat-option value="en buen estado">En buen estado</mat-option>
+            <mat-option value="a reformar">A reformar</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="mobile-sheet-footer">
+      <button type="button" class="mobile-sheet-reset" (click)="limpiarFiltros(); closeSheet()">Restablecer</button>
+      <button type="button" class="mobile-sheet-apply" (click)="buscar(); closeSheet()">
+        Aplicar filtros
+        @if (activeFilterCount > 0) { ({{ activeFilterCount }}) }
+      </button>
+    </div>
+  </div>
+}
+
+<!-- BARRA DE FILTROS STICKY -->
+<div class="filters-wrapper">
+  <form class="filter-bar" (ngSubmit)="buscar()">
+
+    <div class="op-pills">
+      <button type="button" class="op-pill" [class.active]="f.operacion === ''" (click)="setOperacion('')">Todos</button>
+      <button type="button" class="op-pill" [class.active]="f.operacion === 'venta'" (click)="setOperacion('venta')">Venta</button>
+      <button type="button" class="op-pill" [class.active]="f.operacion === 'alquiler'" (click)="setOperacion('alquiler')">Alquiler</button>
     </div>
 
-    <!-- 🔹 Tipo -->
-    <mat-form-field>
+    <div class="filter-sep"></div>
+
+    <mat-form-field class="filter-field" appearance="outline" subscriptSizing="dynamic">
       <mat-label>Tipo</mat-label>
-      <mat-select [(ngModel)]="f.tipo" name="tipo">
+      <mat-select [(ngModel)]="f.tipo" name="tipo" (selectionChange)="buscar()">
         <mat-option value="">Cualquiera</mat-option>
         <mat-option value="pisos">Pisos, Áticos y Dúplex</mat-option>
         <mat-option value="chalets">Chalets y Casas</mat-option>
@@ -34,8 +182,7 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- 🔹 Zona -->
-    <mat-form-field>
+    <mat-form-field class="filter-field" appearance="outline" subscriptSizing="dynamic">
       <mat-label>Zona</mat-label>
       <input
         matInput
@@ -46,184 +193,281 @@
         (ngModelChange)="filterZonas($event)"
         (focus)="onZonaFocus()"
       />
-
-      <!-- ❌ Botón dentro del input -->
-      <!-- ❌ Cruz dentro del input -->
-      <button
-        *ngIf="f.zona"
-        matSuffix
-        type="button"
-        class="clear-btn"
-        (click)="clearZona()"
-        aria-label="Borrar zona"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-
-      <mat-autocomplete
-        #autoZona="matAutocomplete"
-        (optionSelected)="onZonaSelected($event.option.value)"
-      >
-        <mat-option *ngFor="let z of filteredZonas" [value]="z">
-          {{ z }}
-        </mat-option>
+      @if (f.zona) {
+        <button matSuffix type="button" class="clear-btn" (click)="clearZona()" aria-label="Borrar zona">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+      <mat-autocomplete #autoZona="matAutocomplete" (optionSelected)="onZonaSelected($event.option.value)">
+        @for (z of filteredZonas; track z) {
+          <mat-option [value]="z">{{ z }}</mat-option>
+        }
       </mat-autocomplete>
     </mat-form-field>
 
-    <div class="actions">
-      <button class="botonOtroColor" mat-stroked-button>Buscar</button>
-      <button class="botonOtroColor" mat-stroked-button (click)="toggleMoreFilters()">
+    <div class="filter-sep"></div>
+
+    <div class="filter-actions">
+      <button type="button" class="btn-filtros" (click)="toggleMoreFilters()">
+        <mat-icon>tune</mat-icon>
         {{ moreFiltersLabel }}
+        @if (activeFilterCount > 0) {
+          <span class="filter-badge">{{ activeFilterCount }}</span>
+        }
       </button>
-      <button class="botonOtroColor" mat-stroked-button type="button" (click)="limpiarFiltros()">
-        Quitar filtros
+
+      <button type="submit" class="btn-buscar">
+        <mat-icon>search</mat-icon>
+        Buscar
       </button>
-    </div>
 
-    <div class="more-filters" [class.active]="showMoreFilters">
-      <!-- 🔹 Precio -->
-      <div>
-        <h3>Precio</h3>
-        <mat-form-field class="field">
-          <mat-label>Mín</mat-label>
-          <mat-select [(ngModel)]="f.precioMin" name="precioMin">
-            <mat-option value="">Cualquiera</mat-option>
-            <mat-option *ngFor="let p of precios" [value]="p">{{ p | number }} €</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="field">
-          <mat-label>Máx</mat-label>
-          <mat-select [(ngModel)]="f.precioMax" name="precioMax">
-            <mat-option value="">Cualquiera</mat-option>
-            <mat-option *ngFor="let p of precios" [value]="p">{{ p | number }} €</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <!-- 🔹 Habitaciones -->
-      <div>
-        <h3>Habitaciones</h3>
-        <mat-form-field class="field">
-          <mat-label>Mín</mat-label>
-          <mat-select [(ngModel)]="f.dormitoriosMin" name="dormitoriosMin">
-            <mat-option value="">Cualquiera</mat-option>
-            <mat-option *ngFor="let d of dormitorios" [value]="d">{{ d }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="field">
-          <mat-label>Máx</mat-label>
-          <mat-select [(ngModel)]="f.dormitoriosMax" name="dormitoriosMax">
-            <mat-option value="">Cualquiera</mat-option>
-            <mat-option *ngFor="let d of dormitorios" [value]="d">{{ d }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <!-- 🔹 Baños -->
-      <div>
-        <h3>Baños</h3>
-        <mat-form-field class="field">
-          <mat-label>Mín</mat-label>
-          <mat-select [(ngModel)]="f.banosMin" name="banosMin">
-            <mat-option value="">Cualquiera</mat-option>
-            <mat-option *ngFor="let b of banos" [value]="b">{{ b }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="field">
-          <mat-label>Máx</mat-label>
-          <mat-select [(ngModel)]="f.banosMax" name="banosMax">
-            <mat-option value="">Cualquiera</mat-option>
-            <mat-option *ngFor="let b of banos" [value]="b">{{ b }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <!-- 🔹 Metros Cuadrados -->
-      <div>
-        <h3>Metros</h3>
-        <mat-form-field class="field">
-          <mat-label>Mín</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="f.metrosMin"
-            name="metrosMin"
-            placeholder="Mínimo"
-          />
-        </mat-form-field>
-        <mat-form-field class="field">
-          <mat-label>Máx</mat-label>
-          <input
-            matInput
-            type="number"
-            [(ngModel)]="f.metrosMax"
-            name="metrosMax"
-            placeholder="Máximo"
-          />
-        </mat-form-field>
-      </div>
-    </div>
-
-    <!-- 🔹 Estado -->
-    <div class="estado-filter" [class.active]="showMoreFilters">
-      <h3>Estado</h3>
-      <mat-form-field>
-        <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="f.estado" name="estado">
-          <mat-option value="">Cualquiera</mat-option>
-          <mat-option value="obra nueva">Obra nueva</mat-option>
-          <mat-option value="en buen estado">En buen estado</mat-option>
-          <mat-option value="a reformar">A reformar</mat-option>
-        </mat-select>
-      </mat-form-field>
+      @if (tieneFilters) {
+        <button type="button" class="btn-limpiar" (click)="limpiarFiltros()" title="Limpiar todos los filtros">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </div>
   </form>
+
+  <!-- PANEL DE FILTROS AVANZADOS -->
+  <div class="filter-panel" [class.open]="showMoreFilters">
+    <div class="panel-inner">
+
+      <div class="panel-group">
+        <span class="panel-label">Precio</span>
+        <div class="panel-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field panel-field--price">
+            <mat-label>Desde</mat-label>
+            <mat-select [(ngModel)]="f.precioMin" name="precioMin">
+              <mat-option value="">Sin límite</mat-option>
+              @for (p of precios; track p) {
+                <mat-option [value]="p">{{ p | number }} €</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field panel-field--price">
+            <mat-label>Hasta</mat-label>
+            <mat-select [(ngModel)]="f.precioMax" name="precioMax">
+              <mat-option value="">Sin límite</mat-option>
+              @for (p of precios; track p) {
+                <mat-option [value]="p">{{ p | number }} €</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="panel-group">
+        <span class="panel-label">Habitaciones</span>
+        <div class="panel-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field">
+            <mat-label>Mín</mat-label>
+            <mat-select [(ngModel)]="f.dormitoriosMin" name="dormitoriosMin">
+              <mat-option value="">—</mat-option>
+              @for (d of dormitorios; track d) {
+                <mat-option [value]="d">{{ d }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field">
+            <mat-label>Máx</mat-label>
+            <mat-select [(ngModel)]="f.dormitoriosMax" name="dormitoriosMax">
+              <mat-option value="">—</mat-option>
+              @for (d of dormitorios; track d) {
+                <mat-option [value]="d">{{ d }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="panel-group">
+        <span class="panel-label">Baños</span>
+        <div class="panel-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field">
+            <mat-label>Mín</mat-label>
+            <mat-select [(ngModel)]="f.banosMin" name="banosMin">
+              <mat-option value="">—</mat-option>
+              @for (b of banos; track b) {
+                <mat-option [value]="b">{{ b }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field">
+            <mat-label>Máx</mat-label>
+            <mat-select [(ngModel)]="f.banosMax" name="banosMax">
+              <mat-option value="">—</mat-option>
+              @for (b of banos; track b) {
+                <mat-option [value]="b">{{ b }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="panel-group">
+        <span class="panel-label">Metros m²</span>
+        <div class="panel-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field">
+            <mat-label>Mín</mat-label>
+            <input matInput type="number" [(ngModel)]="f.metrosMin" name="metrosMin" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field">
+            <mat-label>Máx</mat-label>
+            <input matInput type="number" [(ngModel)]="f.metrosMax" name="metrosMax" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="panel-group">
+        <span class="panel-label">Estado</span>
+        <div class="panel-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="panel-field panel-field--wide">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="f.estado" name="estado">
+              <mat-option value="">Cualquiera</mat-option>
+              <mat-option value="obra nueva">Obra nueva</mat-option>
+              <mat-option value="en buen estado">En buen estado</mat-option>
+              <mat-option value="a reformar">A reformar</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="panel-apply">
+        <button type="button" class="btn-reset" (click)="limpiarFiltros()">Restablecer</button>
+        <button type="button" class="btn-apply" (click)="buscar(); showMoreFilters = false">Aplicar filtros</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- GRID DE PROPIEDADES -->
+<div class="grid">
+  @for (i of inmuebles; track i.id) {
+    <mat-card class="card">
+      <a [routerLink]="['/inmueble', i.id]" class="card-img-link">
+        <img
+          [src]="i.fotoPrincipal ? 'https://tomasapi.es' + i.fotoPrincipal : 'https://picsum.photos/seed/fallback/800/450'"
+          alt="foto"
+        />
+        <span class="card-badge" [class.venta]="i.operacion === 'venta'" [class.alquiler]="i.operacion === 'alquiler'">
+          {{ i.operacion }}
+        </span>
+      </a>
+      <mat-card-content>
+        <h3>{{ i.titulo }}</h3>
+        <p class="subtitle">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
+        <div class="card-specs">
+          <span class="spec"><mat-icon>king_bed</mat-icon>{{ i.dormitorios }}</span>
+          <span class="spec"><mat-icon>bathtub</mat-icon>{{ i.banos || 0 }}</span>
+          <span class="spec"><mat-icon>straighten</mat-icon>{{ i.metrosConstruidos || 0 }} m²</span>
+        </div>
+        <p class="precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+      </mat-card-content>
+      <mat-card-actions class="card-footer">
+        <a mat-button [routerLink]="['/inmueble', i.id]">Ver detalles</a>
+        @if (i.urlIdealista) {
+          <a mat-stroked-button [href]="i.urlIdealista" target="_blank" rel="noopener">Idealista</a>
+        }
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>
+
+@if (inmuebles.length === 0) {
+  <div class="no-results">
+    <p>No hay propiedades que coincidan con tu búsqueda</p>
+  </div>
+}
+
+<!-- CASOS DE ÉXITO -->
+@if (exitos.length > 0) {
+  <section class="exitos-section">
+    <div class="exitos-header">
+      <span class="exitos-tag">Operaciones cerradas</span>
+      <h2 class="exitos-title">Casos de éxito</h2>
+      <p class="exitos-sub">Propiedades que ya han encontrado a su dueño de la mano de Tomás Rivero</p>
+    </div>
+    <div class="exitos-grid">
+      @for (i of exitos; track i.id) {
+        <a class="exito-card" [routerLink]="['/inmueble', i.id]">
+          <div class="exito-img-wrap">
+            <img
+              [src]="i.fotoPrincipal ? BASE + i.fotoPrincipal : 'https://picsum.photos/seed/ex' + i.id + '/800/500'"
+              alt="foto"
+            />
+            <div class="exito-overlay">
+              <span class="exito-badge" [class.vendido]="i.estadoVenta === 'vendido'" [class.alquilado]="i.estadoVenta === 'alquilado'">
+                {{ i.estadoVenta === 'vendido' ? 'Vendido' : 'Alquilado' }}
+              </span>
+            </div>
+          </div>
+          <div class="exito-info">
+            <p class="exito-tipo">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
+            <h3 class="exito-titulo">{{ i.titulo }}</h3>
+            <p class="exito-precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+}
+
+<!-- FORMULARIO DE CONTACTO -->
+<section class="cat-contact-section" id="contacto">
+  <div class="cat-contact-inner">
+    <div class="cat-contact-header">
+      <span class="cat-contact-tag">Contacto</span>
+      <h2>¿Tienes alguna pregunta?</h2>
+      <p>Cuéntanos qué estás buscando y te ayudamos a encontrarlo.</p>
+    </div>
+
+    @if (contactSent) {
+      <div class="cat-contact-success">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <strong>¡Mensaje enviado!</strong>
+          <p>Nos pondremos en contacto contigo lo antes posible.</p>
+        </div>
+      </div>
+    } @else {
+      <form class="cat-contact-form" (ngSubmit)="sendContact()">
+        <div class="cat-contact-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Nombre *</mat-label>
+            <input matInput [(ngModel)]="contact.nombre" name="nombre" required />
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Teléfono *</mat-label>
+            <input matInput [(ngModel)]="contact.telefono" name="telefono" type="tel" required />
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cat-contact-full">
+          <mat-label>Email (opcional)</mat-label>
+          <input matInput [(ngModel)]="contact.email" name="email" type="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cat-contact-full">
+          <mat-label>Mensaje *</mat-label>
+          <textarea matInput [(ngModel)]="contact.mensaje" name="mensaje" rows="3" required></textarea>
+        </mat-form-field>
+        @if (contactError) {
+          <p class="cat-contact-error">Error al enviar el mensaje. Inténtalo de nuevo.</p>
+        }
+        <button type="submit" class="cat-contact-submit" [disabled]="contactSending">
+          <mat-icon>send</mat-icon>
+          {{ contactSending ? 'Enviando...' : 'Enviar mensaje' }}
+        </button>
+      </form>
+    }
+  </div>
 </section>
 
-<div class="grid">
-  <mat-card *ngFor="let i of inmuebles" class="card">
-    <a [routerLink]="['/inmueble', i.id]">
-      <img
-        mat-card-image
-        [src]="
-          i.fotoPrincipal
-            ? 'https://tomasapi.es' + i.fotoPrincipal
-            : 'https://picsum.photos/seed/fallback/800/450'
-        "
-        alt="foto"
-      />
-    </a>
-    <mat-card-content>
-      <h3>{{ i.titulo }}</h3>
-      <p class="subtitle">
-        {{ i.operacion | titlecase }} · {{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}
-      </p>
-      <p class="subtitle">
-        🛏 {{ i.dormitorios }} · 🛁 {{ i.banos || 0 }} · 📐 {{ i.metrosConstruidos || 0 }} m²
-      </p>
-      <p class="precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
-    </mat-card-content>
-    <mat-card-actions class="card-footer">
-      <a mat-button color="primary" [routerLink]="['/inmueble', i.id]">Ver detalles</a>
-      <a mat-stroked-button color="primary" [href]="i.urlIdealista" target="_blank" rel="noopener"
-        >Idealista</a
-      >
-    </mat-card-actions>
-  </mat-card>
-</div>
-
-<div *ngIf="inmuebles.length === 0" class="no-results">
-  <p>No hay propiedades que coincidan con tu búsqueda 🏠</p>
-</div>
-
 <app-contact-bar></app-contact-bar>
-<a
-  href="https://wa.me/34670950002"
-  target="_blank"
-  rel="noopener"
-  class="whatsapp-float"
-  aria-label="Contactar por WhatsApp"
->
+
+<a href="https://wa.me/34670950002" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Contactar por WhatsApp">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
 </a>
+
 <app-footer></app-footer>

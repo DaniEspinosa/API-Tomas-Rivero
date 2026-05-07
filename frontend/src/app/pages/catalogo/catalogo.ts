@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InmueblesService } from '../../core/services/inmuebles.service';
+import { ContactService } from '../../core/services/contact.service';
 import { TitleCasePipe, CurrencyPipe, CommonModule, DecimalPipe } from '@angular/common';
 import { Inmueble } from '../../core/models/inmueble.model';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +11,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { RouterModule } from '@angular/router';
-import { NgIf, NgFor } from '@angular/common';
 import { Footer } from '../../shared/components/footer/footer';
 import { ContactBarTs } from '../../shared/components/contact-bar.ts/contact-bar.ts';
 import { Navbar } from '../../shared/components/navbar/navbar';
@@ -20,13 +20,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ReplaceUnderscorePipe } from '../../replace-underscore-pipe';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     ContactBarTs,
     MatRadioModule,
     MatCheckboxModule,
@@ -53,7 +52,9 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './catalogo.css',
 })
 export class Catalogo implements OnInit {
+  readonly BASE = environment.apiUrl;
   inmuebles: Inmueble[] = [];
+  exitos: Inmueble[] = [];
   f: any = {
     operacion: '',
     tipo: '',
@@ -69,26 +70,47 @@ export class Catalogo implements OnInit {
     metrosMax: '',
   };
   showMoreFilters: boolean = false;
-  moreFiltersLabel: string = 'Más filtros';
+  showMobileFilters: boolean = false;
+  closingSheet: boolean = false;
   zonas: string[] = [];
   filteredZonas: string[] = [];
 
-  constructor(private readonly service: InmueblesService) {}
+  contact = { nombre: '', telefono: '', email: '', mensaje: '' };
+  contactSending = false;
+  contactSent = false;
+  contactError = false;
+
+  constructor(
+    private readonly service: InmueblesService,
+    private readonly contactService: ContactService,
+  ) {}
 
   ngOnInit() {
     this.buscar();
     this.cargarZonas();
+    this.cargarExitos();
+  }
+
+  get moreFiltersLabel(): string {
+    return this.showMoreFilters ? 'Menos filtros' : 'Más filtros';
+  }
+
+  get activeFilterCount(): number {
+    const extras = ['estado', 'dormitoriosMin', 'dormitoriosMax', 'banosMin', 'banosMax', 'precioMin', 'precioMax', 'metrosMin', 'metrosMax'];
+    return extras.filter(k => this.f[k] !== '' && this.f[k] !== undefined).length;
+  }
+
+  get tieneFilters(): boolean {
+    return Object.values(this.f).some((v: any) => v !== '' && v !== undefined);
+  }
+
+  setOperacion(op: string) {
+    this.f.operacion = op;
+    this.buscar();
   }
 
   toggleMoreFilters() {
-    this.showMoreFilters = !this.showMoreFilters; // Alterna la visibilidad de los filtros adicionales
-
-    // Cambiar el texto del botón según el estado de los filtros
-    if (this.showMoreFilters) {
-      this.moreFiltersLabel = 'Menos filtros';
-    } else {
-      this.moreFiltersLabel = 'Más filtros';
-    }
+    this.showMoreFilters = !this.showMoreFilters;
   }
 
   precios: number[] = [
@@ -102,7 +124,6 @@ export class Catalogo implements OnInit {
   buscar() {
     let tiposFiltrados: string[] | undefined;
 
-    // 🔹 Convertir grupo seleccionado en tipos reales
     if (this.f.tipo === 'pisos') {
       tiposFiltrados = ['piso', 'atico', 'duplex'];
     } else if (this.f.tipo === 'chalets') {
@@ -126,19 +147,27 @@ export class Catalogo implements OnInit {
       estado: this.f.estado || undefined,
     };
 
-    console.log('🔍 Enviando filtros:', filtros);
-    console.log('📍 Valor actual de zona:', this.f.zona);
-
     this.service.getInmuebles(filtros).subscribe({
-      next: (data) => (this.inmuebles = data),
-      error: (err) => console.error('❌ Error cargando inmuebles:', err),
+      next: (data) => (this.inmuebles = data.filter(
+        (i) => !i.estadoVenta || i.estadoVenta === 'disponible' || i.estadoVenta === 'reservado'
+      )),
+      error: (err) => console.error('Error cargando inmuebles:', err),
+    });
+  }
+
+  cargarExitos() {
+    this.service.getInmuebles({}).subscribe({
+      next: (data) => (this.exitos = data.filter(
+        (i) => i.estadoVenta === 'vendido' || i.estadoVenta === 'alquilado'
+      )),
+      error: (err) => console.error('Error cargando éxitos:', err),
     });
   }
 
   clearZona() {
     this.f.zona = '';
     this.filteredZonas = this.zonas;
-    this.buscar(); // opcional: actualiza resultados al limpiar
+    this.buscar();
   }
 
   cargarZonas() {
@@ -166,14 +195,26 @@ export class Catalogo implements OnInit {
   }
 
   onZonaFocus() {
-    // al enfocar, muestra todas si no hay nada escrito
     this.filterZonas(this.f.zona || '');
   }
 
   onZonaSelected(zona: string) {
-    this.f.zona = zona; // ya autocompleta el input
-    // Si quieres disparar la búsqueda al seleccionar:
-    // this.buscar();
+    this.f.zona = zona;
+  }
+
+  closeSheet() {
+    this.closingSheet = true;
+    setTimeout(() => { this.showMobileFilters = false; this.closingSheet = false; }, 280);
+  }
+
+  sendContact() {
+    if (!this.contact.nombre || !this.contact.telefono || !this.contact.mensaje) return;
+    this.contactSending = true;
+    this.contactError = false;
+    this.contactService.send(this.contact).subscribe({
+      next: () => { this.contactSending = false; this.contactSent = true; },
+      error: () => { this.contactSending = false; this.contactError = true; },
+    });
   }
 
   limpiarFiltros() {
@@ -191,6 +232,7 @@ export class Catalogo implements OnInit {
       metrosMin: '',
       metrosMax: '',
     };
-    this.buscar(); // Vuelve a cargar sin filtros
+    this.showMoreFilters = false;
+    this.buscar();
   }
 }

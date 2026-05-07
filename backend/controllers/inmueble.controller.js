@@ -115,9 +115,11 @@ exports.create = async (req, res) => {
   try {
     const data = { ...req.body };
 
-    // 📸 Foto subida
-    if (req.file) {
-      data.fotoPrincipal = `/uploads/${req.file.filename}`;
+    if (req.files?.fotoPrincipal?.[0]) {
+      data.fotoPrincipal = `/uploads/${req.files.fotoPrincipal[0].filename}`;
+    }
+    if (req.files?.fotos?.length) {
+      data.fotos = req.files.fotos.map((f) => `/uploads/${f.filename}`);
     }
 
     // 📝 Características (si viene como string, lo parseamos)
@@ -143,8 +145,11 @@ exports.update = async (req, res) => {
     const { id } = req.params;
     const data = { ...req.body };
 
-    if (req.file) {
-      data.fotoPrincipal = `/uploads/${req.file.filename}`;
+    if (req.files?.fotoPrincipal?.[0]) {
+      data.fotoPrincipal = `/uploads/${req.files.fotoPrincipal[0].filename}`;
+    }
+    if (req.files?.fotos?.length) {
+      data.fotos = req.files.fotos.map((f) => `/uploads/${f.filename}`);
     }
 
     if (typeof data.caracteristicas === "string") {

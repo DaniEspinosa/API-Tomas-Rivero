@@ -24,8 +24,12 @@ router.get("/", controller.getAll);
 router.get("/:id", controller.getOne);
 
 // 📌 Rutas protegidas (admin con token)
-router.post("/", auth, upload.single("fotoPrincipal"), controller.create);
-router.put("/:id", auth, upload.single("fotoPrincipal"), controller.update);
+const uploadFields = upload.fields([
+  { name: "fotoPrincipal", maxCount: 1 },
+  { name: "fotos", maxCount: 10 },
+]);
+router.post("/", auth, uploadFields, controller.create);
+router.put("/:id", auth, uploadFields, controller.update);
 router.delete("/:id", auth, controller.delete);
 
 module.exports = router;

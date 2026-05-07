@@ -6,10 +6,11 @@ import { AuthService } from './auth.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class InmueblesService {
-  private api = 'https://tomasapi.es/inmuebles';
+  private api = `${environment.apiUrl}/inmuebles`;
 
   constructor(private http: HttpClient, private auth: AuthService, private router: Router) {}
 
@@ -50,7 +51,7 @@ export class InmueblesService {
   }
 
   getZonas() {
-    return this.http.get<string[]>('https://tomasapi.es/inmuebles/zonas');
+    return this.http.get<string[]>(`${environment.apiUrl}/inmuebles/zonas`);
   }
 
   // Crear con FormData (🔒 requiere token)

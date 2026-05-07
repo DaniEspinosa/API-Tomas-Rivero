@@ -1,0 +1,15 @@
+@if (visible) {
+  <div class="cookie-banner">
+    <div class="cookie-text">
+      <strong>Usamos cookies</strong>
+      <p>
+        Utilizamos cookies técnicas propias necesarias para el funcionamiento del sitio.
+        Consulta nuestra <a routerLink="/politica-privacidad">Política de Privacidad</a>.
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button class="cookie-btn cookie-btn--essential" type="button" (click)="essential()">Solo esenciales</button>
+      <button class="cookie-btn cookie-btn--accept" type="button" (click)="accept()">Aceptar todas</button>
+    </div>
+  </div>
+}

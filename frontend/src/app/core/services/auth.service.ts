@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private api = 'https://tomasapi.es'; // URL correcta de tu backend desplegado
+  private api = environment.apiUrl;
 
   private key = 'token';
 
@@ -38,7 +39,22 @@ export class AuthService {
     }
   }
 
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return Date.now() >= payload.exp * 1000;
+    } catch {
+      return true;
+    }
+  }
+
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    if (!this.getToken() || this.isTokenExpired()) {
+      this.logout();
+      return false;
+    }
+    return true;
   }
 }

@@ -5,6 +5,7 @@ const path = require("path");
 const db = require("./models");
 const inmuebleRoutes = require("./routes/inmueble.routes");
 const authRoutes = require("./routes/auth.routes");
+const contactRoutes = require("./routes/contact.routes");
 
 dotenv.config();
 
@@ -18,13 +19,14 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // 🧠 Rutas de API
 app.use("/auth", authRoutes);
 app.use("/inmuebles", inmuebleRoutes);
+app.use("/contact", contactRoutes);
 
 // 🧩 Conexión base de datos
 const PORT = process.env.PORT || 3000;
 (async () => {
   try {
     await db.sequelize.authenticate();
-    await db.sequelize.sync();
+    await db.sequelize.sync({ alter: true });
     app.listen(PORT, () =>
       console.log(`✅ API escuchando en http://localhost:${PORT}`)
     );
@@ -43,6 +45,7 @@ app.use((req, res, next) => {
   if (
     req.originalUrl.startsWith("/auth") ||
     req.originalUrl.startsWith("/inmuebles") ||
+    req.originalUrl.startsWith("/contact") ||
     req.originalUrl.startsWith("/uploads")
   ) {
     return next(); // deja pasar las rutas de API o estáticos
