@@ -572,6 +572,9 @@ mat-card-content h3 {
   margin: 0;
 }
 
+/* "Consultar precio" ocupa más ancho que una cifra: se reduce el cuerpo */
+.precio.consultar { font-size: 1.05rem; }
+
 .card-footer {
   display: flex;
   justify-content: space-between;

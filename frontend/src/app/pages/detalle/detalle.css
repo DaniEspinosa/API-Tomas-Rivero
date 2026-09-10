@@ -149,6 +149,9 @@
   white-space: nowrap;
 }
 
+/* Cuando no hay precio se muestra "Consultar precio": texto más largo, cuerpo menor */
+.detalle-precio.consultar { font-size: 1.35rem; }
+
 /* ===========================
    BODY LAYOUT
 =========================== */
@@ -773,6 +776,8 @@
 
   .detalle-titulo { font-size: 1.35rem; }
   .detalle-precio { font-size: 1.6rem; }
+
+  .detalle-precio.consultar { font-size: 1.15rem; }
 
   .detalle-body { margin-top: 1rem; }
 

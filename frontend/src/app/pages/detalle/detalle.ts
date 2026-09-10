@@ -38,6 +38,15 @@ export class Detalle implements OnInit {
   readonly BASE = environment.apiUrl;
   readonly DESC_LIMIT = 350;
 
+  /**
+   * Tipos de inmueble en los que "sin ascensor" sigue siendo un dato relevante
+   * para el usuario. En el resto (local, nave, terreno, garaje, chalet...) la
+   * fila solo aparece si el inmueble sí tiene ascensor.
+   */
+  private readonly TIPOS_ASCENSOR_RELEVANTE: Inmueble['tipo'][] = [
+    'piso', 'atico', 'duplex', 'estudio', 'oficina', 'habitacion',
+  ];
+
   contact = { nombre: '', telefono: '', email: '', mensaje: '' };
   contactSending = false;
   contactSent = false;
@@ -74,6 +83,11 @@ export class Detalle implements OnInit {
 
   get needsCollapse(): boolean {
     return (this.inmueble?.descripcion?.length ?? 0) > this.DESC_LIMIT;
+  }
+
+  get mostrarAscensor(): boolean {
+    if (!this.inmueble) return false;
+    return this.inmueble.ascensor === true || this.TIPOS_ASCENSOR_RELEVANTE.includes(this.inmueble.tipo);
   }
 
   get allPhotos(): string[] {

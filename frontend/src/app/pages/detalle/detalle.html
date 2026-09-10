@@ -34,7 +34,7 @@
         <p class="detalle-zona"><mat-icon>location_on</mat-icon>{{ inmueble.zona }}</p>
       </div>
       <div class="title-strip-right">
-        <p class="detalle-precio">{{ inmueble.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+        <p class="detalle-precio" [class.consultar]="!inmueble.precio">{{ inmueble.precio ? (inmueble.precio | currency : 'EUR' : 'symbol' : '1.0-0') : 'Consultar precio' }}</p>
         <button class="btn-share" type="button" (click)="share()" title="Compartir">
           <mat-icon>share</mat-icon> Compartir
         </button>
@@ -155,15 +155,25 @@
     <div class="detalle-right">
 
       <section class="specs-card">
-        <div class="spec-row"><mat-icon>king_bed</mat-icon><span class="spec-label">Dormitorios</span><span class="spec-value">{{ inmueble.dormitorios }}</span></div>
-        <div class="spec-row"><mat-icon>bathtub</mat-icon><span class="spec-label">Baños</span><span class="spec-value">{{ inmueble.banos }}</span></div>
-        <div class="spec-row"><mat-icon>straighten</mat-icon><span class="spec-label">Metros útiles</span><span class="spec-value">{{ inmueble.metrosUtiles }} m²</span></div>
-        <div class="spec-row"><mat-icon>straighten</mat-icon><span class="spec-label">Metros construidos</span><span class="spec-value">{{ inmueble.metrosConstruidos }} m²</span></div>
+        @if (inmueble.dormitorios) {
+          <div class="spec-row"><mat-icon>king_bed</mat-icon><span class="spec-label">Dormitorios</span><span class="spec-value">{{ inmueble.dormitorios }}</span></div>
+        }
+        @if (inmueble.banos) {
+          <div class="spec-row"><mat-icon>bathtub</mat-icon><span class="spec-label">Baños</span><span class="spec-value">{{ inmueble.banos }}</span></div>
+        }
+        @if (inmueble.metrosUtiles) {
+          <div class="spec-row"><mat-icon>straighten</mat-icon><span class="spec-label">Metros útiles</span><span class="spec-value">{{ inmueble.metrosUtiles }} m²</span></div>
+        }
+        @if (inmueble.metrosConstruidos) {
+          <div class="spec-row"><mat-icon>straighten</mat-icon><span class="spec-label">Metros construidos</span><span class="spec-value">{{ inmueble.metrosConstruidos }} m²</span></div>
+        }
         @if (inmueble.metrosParcela) {
           <div class="spec-row"><mat-icon>landscape</mat-icon><span class="spec-label">Metros parcela</span><span class="spec-value">{{ inmueble.metrosParcela }} m²</span></div>
         }
         <div class="spec-row"><mat-icon>build</mat-icon><span class="spec-label">Estado</span><span class="spec-value">{{ inmueble.estado | titlecase }}</span></div>
-        <div class="spec-row"><mat-icon>elevator</mat-icon><span class="spec-label">Ascensor</span><span class="spec-value">{{ inmueble.ascensor ? 'Sí' : 'No' }}</span></div>
+        @if (mostrarAscensor) {
+          <div class="spec-row"><mat-icon>elevator</mat-icon><span class="spec-label">Ascensor</span><span class="spec-value">{{ inmueble.ascensor ? 'Sí' : 'No' }}</span></div>
+        }
         @if (inmueble.orientacion) {
           <div class="spec-row"><mat-icon>explore</mat-icon><span class="spec-label">Orientación</span><span class="spec-value">{{ inmueble.orientacion | titlecase }}</span></div>
         }

@@ -359,12 +359,20 @@
       <mat-card-content>
         <h3>{{ i.titulo }}</h3>
         <p class="subtitle">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
-        <div class="card-specs">
-          <span class="spec"><mat-icon>king_bed</mat-icon>{{ i.dormitorios }}</span>
-          <span class="spec"><mat-icon>bathtub</mat-icon>{{ i.banos || 0 }}</span>
-          <span class="spec"><mat-icon>straighten</mat-icon>{{ i.metrosConstruidos || 0 }} m²</span>
-        </div>
-        <p class="precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+        @if (i.dormitorios || i.banos || i.metrosConstruidos) {
+          <div class="card-specs">
+            @if (i.dormitorios) {
+              <span class="spec"><mat-icon>king_bed</mat-icon>{{ i.dormitorios }}</span>
+            }
+            @if (i.banos) {
+              <span class="spec"><mat-icon>bathtub</mat-icon>{{ i.banos }}</span>
+            }
+            @if (i.metrosConstruidos) {
+              <span class="spec"><mat-icon>straighten</mat-icon>{{ i.metrosConstruidos }} m²</span>
+            }
+          </div>
+        }
+        <p class="precio" [class.consultar]="!i.precio">{{ i.precio ? (i.precio | currency : 'EUR' : 'symbol' : '1.0-0') : 'Consultar precio' }}</p>
       </mat-card-content>
       <mat-card-actions class="card-footer">
         <a mat-button [routerLink]="['/inmueble', i.id]">Ver detalles</a>
@@ -407,7 +415,9 @@
           <div class="exito-info">
             <p class="exito-tipo">{{ i.tipo | replaceUnderscore | titlecase }} · {{ i.zona }}</p>
             <h3 class="exito-titulo">{{ i.titulo }}</h3>
-            <p class="exito-precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+            @if (i.precio) {
+              <p class="exito-precio">{{ i.precio | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
+            }
           </div>
         </a>
       }
