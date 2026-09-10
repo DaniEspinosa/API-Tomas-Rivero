@@ -26,7 +26,13 @@ const PORT = process.env.PORT || 3000;
 (async () => {
   try {
     await db.sequelize.authenticate();
-    await db.sequelize.sync({ alter: true });
+    // OJO: no usar `alter: true` en cada arranque. En MySQL, un campo declarado
+    // con `unique: true` hace que sync() cree un índice único NUEVO en cada
+    // arranque (email, email_2, email_3...) hasta agotar el límite de 64 índices
+    // por tabla y romper con ER_TOO_MANY_KEYS.
+    // Por defecto solo se crean las tablas que falten. Para propagar un cambio de
+    // columnas se arranca puntualmente con DB_ALTER=true.
+    await db.sequelize.sync(process.env.DB_ALTER === "true" ? { alter: true } : {});
     app.listen(PORT, () =>
       console.log(`✅ API escuchando en http://localhost:${PORT}`)
     );
